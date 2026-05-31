@@ -9,7 +9,7 @@ export const SCORING_DEFAULTS = {
   noQueens: { perQueen: -6 },
   noKingOfHearts: { takingIt: -20 },
   tenOfClubs: { takingIt: 10 },
-  totals: { multiplier: 2 },
+  totals: { multiplier: 1 },
   whist: { perTrick: 2 },
   rentz: {
     byPosition: {
@@ -18,6 +18,8 @@ export const SCORING_DEFAULTS = {
       6: [50, 30, 10, -10, -30, -40],
     },
   },
+  /** Multiplier applied to the round's scores when the picker declared blind. */
+  blindMultiplier: 2,
 } as const;
 
 export type ScoringConfig = {
@@ -29,6 +31,7 @@ export type ScoringConfig = {
   totals: { multiplier: number };
   whist: { perTrick: number };
   rentz: { byPosition: Record<4 | 5 | 6, number[]> };
+  blindMultiplier: number;
 };
 
 export function cloneDefaultScoring(): ScoringConfig {

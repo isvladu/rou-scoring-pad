@@ -26,6 +26,8 @@ The app models a specific Romanian Rentz variant. Treat these as authoritative �
 
 Full rotation — each player **picks** each contract exactly once. Game length is `players × 8` rounds (32 / 40 / 48). The ContractPicker screen hides contracts the current picker has already chosen.
 
+**Blind ("pe nevăzute")** — the picker may declare *blind* before seeing their cards. Stored as `Round.blind: boolean`. When true, `computeRoundScores` multiplies every player's score for that round by `ScoringConfig.blindMultiplier` (default 2). The multipliers stack with `totals.multiplier`, so a blind Totale is `2 × 2 = 4×` by default. The blind toggle is **disabled in the UI when only one contract remains for the current picker** (you can't be brave about a forced choice). This is a UI-only rule — the domain layer accepts a `blind` flag unconditionally so the rule can be relaxed later without a schema change.
+
 ## Architecture invariants
 
 - **All code identifiers (enums, types, keys, filenames, persisted JSON fields) are English.** Romanian only appears in `src/i18n/locales/ro.json`. Never introduce Romanian variable or type names.

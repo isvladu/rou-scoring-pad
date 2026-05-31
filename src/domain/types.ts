@@ -57,6 +57,8 @@ export interface Round {
   /** The player whose turn it is to pick the contract and lead play. */
   pickerId: PlayerId;
   entry: RoundEntry;
+  /** True if the picker declared blind ("pe nevăzute") before seeing the cards. */
+  blind: boolean;
   scores: Record<PlayerId, number>;
   committedAt: string;
 }

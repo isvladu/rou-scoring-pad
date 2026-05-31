@@ -190,6 +190,11 @@ function ScoringEditor({
         value={scoring.whist.perTrick}
         onValue={(n) => onChange({ ...scoring, whist: { perTrick: n } })}
       />
+      <ScoringRow
+        label={t('newGame.blindMultiplier')}
+        value={scoring.blindMultiplier}
+        onValue={(n) => onChange({ ...scoring, blindMultiplier: n })}
+      />
       <div className="mt-2 border-t border-slate-800 pt-2">
         <span className="text-sm text-slate-300">
           {t('contracts.rentz.label')} ({count}p)

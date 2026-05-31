@@ -194,6 +194,65 @@ describe('rentz scoring', () => {
   });
 });
 
+describe('blind multiplier', () => {
+  it('multiplies every player\'s score by blindMultiplier when blind=true', () => {
+    const players = makePlayers(4);
+    const scoring = cloneDefaultScoring();
+    const scores = computeRoundScores(
+      { contract: 'noTricks', counts: { p1: 3, p2: 0, p3: 5, p4: 0 } },
+      players,
+      scoring,
+      true,
+    );
+    // Default -2 per trick × ×2 blind = -4 per trick.
+    expect(scores).toEqual({ p1: -12, p2: 0, p3: -20, p4: 0 });
+  });
+
+  it('stacks with totals.multiplier (×2 × ×2 = ×4 by default)', () => {
+    const players = makePlayers(4);
+    const scoring = cloneDefaultScoring();
+    const scores = computeRoundScores(
+      {
+        contract: 'totals',
+        tricks: { p1: 8, p2: 0, p3: 0, p4: 0 },
+        diamonds: { p1: 8, p2: 0, p3: 0, p4: 0 },
+        queens: { p1: 4, p2: 0, p3: 0, p4: 0 },
+        kingOfHeartsTakerId: 'p1',
+      },
+      players,
+      scoring,
+      true,
+    );
+    const baseP1 = (-2 * 8 + -2 * 8 + -6 * 4 + -20) * 2; // totals.multiplier
+    expect(scores.p1).toBe(baseP1 * 2); // × blindMultiplier
+    expect(scores.p2).toBe(0);
+  });
+
+  it('respects a custom blindMultiplier value', () => {
+    const players = makePlayers(4);
+    const scoring = cloneDefaultScoring();
+    scoring.blindMultiplier = 3;
+    const scores = computeRoundScores(
+      { contract: 'tenOfClubs', takerId: 'p2' },
+      players,
+      scoring,
+      true,
+    );
+    expect(scores).toEqual({ p1: 0, p2: 30, p3: 0, p4: 0 });
+  });
+
+  it('does not modify scores when blind=false (default)', () => {
+    const players = makePlayers(4);
+    const scoring = cloneDefaultScoring();
+    const plain = computeRoundScores(
+      { contract: 'whist', counts: { p1: 3, p2: 2, p3: 2, p4: 1 } },
+      players,
+      scoring,
+    );
+    expect(plain).toEqual({ p1: 6, p2: 4, p3: 4, p4: 2 });
+  });
+});
+
 describe('totalScores', () => {
   it('sums per-player across rounds', () => {
     const players = makePlayers(4);

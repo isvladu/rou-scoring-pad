@@ -10,9 +10,9 @@ interface Props {
 
 export default function RotationGrid({ players, rounds, rotation }: Props) {
   const { t } = useTranslation();
-  const playedMap = new Map<string, string>();
+  const playedMap = new Map<string, { blind: boolean }>();
   for (const r of rounds) {
-    playedMap.set(`${r.pickerId}:${r.entry.contract}`, '·');
+    playedMap.set(`${r.pickerId}:${r.entry.contract}`, { blind: r.blind });
   }
 
   return (
@@ -46,7 +46,7 @@ export default function RotationGrid({ players, rounds, rotation }: Props) {
                 {p.name}
               </td>
               {ALL_CONTRACTS.map((c) => {
-                const played = playedMap.has(`${p.id}:${c}`);
+                const played = playedMap.get(`${p.id}:${c}`);
                 const isCurrent =
                   p.id === rotation.currentPickerId && rotation.legalContracts.includes(c);
                 return (
@@ -55,13 +55,15 @@ export default function RotationGrid({ players, rounds, rotation }: Props) {
                     className={
                       'h-7 w-7 border border-slate-800 text-center text-base ' +
                       (played
-                        ? 'bg-slate-800 text-slate-500'
+                        ? played.blind
+                          ? 'bg-amber-500/15 font-bold text-amber-400'
+                          : 'bg-slate-800 text-slate-500'
                         : isCurrent
                           ? 'bg-brand-500/10 text-brand-500'
                           : 'text-slate-700')
                     }
                   >
-                    {played ? '·' : ''}
+                    {played ? (played.blind ? 'B' : '·') : ''}
                   </td>
                 );
               })}

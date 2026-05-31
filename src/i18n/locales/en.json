@@ -44,6 +44,7 @@
     "playerNamePlaceholder": "Player {{n}}",
     "scoringOverrides": "Scoring (advanced)",
     "scoringHint": "Default values can be edited per game.",
+    "blindMultiplier": "Blind × multiplier",
     "start": "Start game",
     "nameRequired": "All player names are required."
   },
@@ -58,6 +59,10 @@
     "dealerIs": "{{name}} deals",
     "picksLabel": "picks",
     "pickContract": "Pick a contract",
+    "blindToggle": "Blind",
+    "blindHelp": "Decide before looking at the cards. Multiplies the round score by ×{{m}}.",
+    "blindUnavailable": "Blind isn't allowed on your last remaining contract.",
+    "blindBadge": "BLIND",
     "noContractsLeft": "{{name}} has picked all contracts.",
     "lastRound": "Last round",
     "undoRound": "Undo last round"

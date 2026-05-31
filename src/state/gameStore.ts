@@ -11,7 +11,7 @@ interface GameStore {
   loading: boolean;
   load(id: string): Promise<void>;
   startGame(players: Player[], scoring?: ScoringConfig): Promise<Game>;
-  commitRound(entry: RoundEntry): Promise<void>;
+  commitRound(entry: RoundEntry, options?: { blind?: boolean }): Promise<void>;
   undoLastRound(): Promise<void>;
   finish(): Promise<void>;
   clear(): void;
@@ -52,7 +52,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     return game;
   },
 
-  async commitRound(entry) {
+  async commitRound(entry, options = {}) {
     const game = get().active;
     if (!game) throw new Error('No active game');
     const validation = validateRoundEntry(entry, game.players);
@@ -61,7 +61,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     const rotation = computeRotation(game.players, game.rounds);
     if (!rotation.currentPickerId) throw new Error('Game already finished');
-    const scores = computeRoundScores(entry, game.players, game.scoring);
+    const blind = options.blind === true;
+    const scores = computeRoundScores(entry, game.players, game.scoring, blind);
     const updated: Game = {
       ...game,
       rounds: [
@@ -70,6 +71,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           index: rotation.currentRoundIndex,
           pickerId: rotation.currentPickerId,
           entry,
+          blind,
           scores,
           committedAt: new Date().toISOString(),
         },

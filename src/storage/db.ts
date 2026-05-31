@@ -10,7 +10,7 @@ interface RentzDB extends DBSchema {
 }
 
 const DB_NAME = 'rentz';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 let dbPromise: Promise<IDBPDatabase<RentzDB>> | null = null;
 
@@ -37,6 +37,30 @@ export function getDb(): Promise<IDBPDatabase<RentzDB>> {
                 delete r.dealerId;
                 changed = true;
               }
+            }
+            if (changed) await cursor.update(game as unknown as Game);
+            cursor = await cursor.continue();
+          }
+        }
+        if (oldVersion < 3) {
+          // v3: added Round.blind and ScoringConfig.blindMultiplier.
+          const store = tx.objectStore('games');
+          let cursor = await store.openCursor();
+          while (cursor) {
+            const game = cursor.value as unknown as {
+              rounds?: { blind?: boolean }[];
+              scoring?: { blindMultiplier?: number };
+            };
+            let changed = false;
+            for (const r of game.rounds ?? []) {
+              if (typeof r.blind !== 'boolean') {
+                r.blind = false;
+                changed = true;
+              }
+            }
+            if (game.scoring && typeof game.scoring.blindMultiplier !== 'number') {
+              game.scoring.blindMultiplier = 2;
+              changed = true;
             }
             if (changed) await cursor.update(game as unknown as Game);
             cursor = await cursor.continue();

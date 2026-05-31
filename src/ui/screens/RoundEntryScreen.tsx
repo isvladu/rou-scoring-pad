@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useGameStore } from '../../state/gameStore';
 import { validateRoundEntry } from '../../domain/validation';
 import { computeRoundScores } from '../../domain/scoring';
@@ -36,8 +36,10 @@ function emptyCounts(players: Player[]): Record<PlayerId, number> {
 export default function RoundEntryScreen() {
   const { t } = useTranslation();
   const { id, contract } = useParams();
+  const [search] = useSearchParams();
   const navigate = useNavigate();
   const { active, load, commitRound } = useGameStore();
+  const blind = search.get('blind') === '1';
 
   useEffect(() => {
     if (id && active?.id !== id) void load(id);
@@ -51,12 +53,18 @@ export default function RoundEntryScreen() {
   const c = contract as ContractId;
   const players = active.players;
   const count = players.length as PlayerCount;
+  const opts = { blind };
 
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div>
-        <div className="text-xs uppercase tracking-wide text-slate-400">
-          {t(`contracts.${c}.kind`)}
+        <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-slate-400">
+          <span>{t(`contracts.${c}.kind`)}</span>
+          {blind && (
+            <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold tracking-wide text-amber-400">
+              {t('game.blindBadge')} ×{active.scoring.blindMultiplier}
+            </span>
+          )}
         </div>
         <h2 className="text-xl font-semibold text-slate-100">{t(`contracts.${c}.label`)}</h2>
       </div>
@@ -67,7 +75,7 @@ export default function RoundEntryScreen() {
           expected={TRICKS_PER_HAND}
           label={t('roundEntry.tricks')}
           onSubmit={(counts) =>
-            commitRound({ contract: c, counts }).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, counts }, opts).then(() => navigate(`/game/${active.id}`))
           }
         />
       ) : c === 'noDiamonds' ? (
@@ -76,7 +84,7 @@ export default function RoundEntryScreen() {
           expected={diamondsInDeck(count)}
           label={t('roundEntry.diamonds')}
           onSubmit={(counts) =>
-            commitRound({ contract: c, counts }).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, counts }, opts).then(() => navigate(`/game/${active.id}`))
           }
         />
       ) : c === 'noQueens' ? (
@@ -85,7 +93,7 @@ export default function RoundEntryScreen() {
           expected={QUEENS_IN_DECK}
           label={t('roundEntry.queens')}
           onSubmit={(counts) =>
-            commitRound({ contract: c, counts }).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, counts }, opts).then(() => navigate(`/game/${active.id}`))
           }
         />
       ) : c === 'noKingOfHearts' ? (
@@ -93,7 +101,7 @@ export default function RoundEntryScreen() {
           players={players}
           label={t('roundEntry.kingOfHearts')}
           onSubmit={(takerId) =>
-            commitRound({ contract: c, takerId }).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, takerId }, opts).then(() => navigate(`/game/${active.id}`))
           }
         />
       ) : c === 'tenOfClubs' ? (
@@ -101,7 +109,7 @@ export default function RoundEntryScreen() {
           players={players}
           label={t('roundEntry.tenOfClubs')}
           onSubmit={(takerId) =>
-            commitRound({ contract: c, takerId }).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, takerId }, opts).then(() => navigate(`/game/${active.id}`))
           }
         />
       ) : c === 'totals' ? (
@@ -109,14 +117,15 @@ export default function RoundEntryScreen() {
           players={players}
           count={count}
           onSubmit={(entry) =>
-            commitRound(entry).then(() => navigate(`/game/${active.id}`))
+            commitRound(entry, opts).then(() => navigate(`/game/${active.id}`))
           }
         />
       ) : (
         <RentzEntry
           players={players}
+          blind={blind}
           onSubmit={(finishingOrder) =>
-            commitRound({ contract: 'rentz', finishingOrder }).then(() =>
+            commitRound({ contract: 'rentz', finishingOrder }, opts).then(() =>
               navigate(`/game/${active.id}`),
             )
           }
@@ -296,9 +305,11 @@ function TotalsEntry({
 
 function RentzEntry({
   players,
+  blind,
   onSubmit,
 }: {
   players: Player[];
+  blind: boolean;
   onSubmit(order: PlayerId[]): Promise<unknown>;
 }) {
   const { t } = useTranslation();
@@ -311,8 +322,9 @@ function RentzEntry({
       { contract: 'rentz', finishingOrder: order },
       players,
       active.scoring,
+      blind,
     );
-  }, [order, complete, players, active]);
+  }, [order, complete, players, active, blind]);
 
   return (
     <div className="space-y-4">

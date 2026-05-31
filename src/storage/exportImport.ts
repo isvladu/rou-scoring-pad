@@ -28,43 +28,57 @@ const RoundEntrySchema: z.ZodType<RoundEntry> = z.discriminatedUnion('contract',
 
 const RoundSchema = z.preprocess(
   (val) => {
+    if (!val || typeof val !== 'object') return val;
+    const rec = val as Record<string, unknown>;
     // Accept legacy exports that used `dealerId` for what is now `pickerId`.
-    if (
-      val &&
-      typeof val === 'object' &&
-      'dealerId' in val &&
-      !('pickerId' in (val as Record<string, unknown>))
-    ) {
-      const { dealerId, ...rest } = val as Record<string, unknown>;
-      return { ...rest, pickerId: dealerId };
+    if ('dealerId' in rec && !('pickerId' in rec)) {
+      const { dealerId, ...rest } = rec;
+      return { ...rest, pickerId: dealerId, blind: rest.blind ?? false };
     }
-    return val;
+    // Older v2 exports lacked the `blind` flag.
+    if (!('blind' in rec)) {
+      return { ...rec, blind: false };
+    }
+    return rec;
   },
   z.object({
     index: z.number(),
     pickerId: z.string(),
     entry: RoundEntrySchema,
+    blind: z.boolean(),
     scores: z.record(z.string(), z.number()),
     committedAt: z.string(),
   }),
 );
 
-const ScoringSchema = z.object({
-  noTricks: z.object({ perTrick: z.number() }),
-  noDiamonds: z.object({ perDiamond: z.number() }),
-  noQueens: z.object({ perQueen: z.number() }),
-  noKingOfHearts: z.object({ takingIt: z.number() }),
-  tenOfClubs: z.object({ takingIt: z.number() }),
-  totals: z.object({ multiplier: z.number() }),
-  whist: z.object({ perTrick: z.number() }),
-  rentz: z.object({
-    byPosition: z.object({
-      4: z.array(z.number()),
-      5: z.array(z.number()),
-      6: z.array(z.number()),
+const ScoringSchema = z.preprocess(
+  (val) => {
+    if (!val || typeof val !== 'object') return val;
+    const rec = val as Record<string, unknown>;
+    // Pre-blind exports lacked `blindMultiplier`; default to 2.
+    if (!('blindMultiplier' in rec)) {
+      return { ...rec, blindMultiplier: 2 };
+    }
+    return rec;
+  },
+  z.object({
+    noTricks: z.object({ perTrick: z.number() }),
+    noDiamonds: z.object({ perDiamond: z.number() }),
+    noQueens: z.object({ perQueen: z.number() }),
+    noKingOfHearts: z.object({ takingIt: z.number() }),
+    tenOfClubs: z.object({ takingIt: z.number() }),
+    totals: z.object({ multiplier: z.number() }),
+    whist: z.object({ perTrick: z.number() }),
+    rentz: z.object({
+      byPosition: z.object({
+        4: z.array(z.number()),
+        5: z.array(z.number()),
+        6: z.array(z.number()),
+      }),
     }),
+    blindMultiplier: z.number(),
   }),
-});
+);
 
 const GameSchema = z.object({
   id: z.string(),

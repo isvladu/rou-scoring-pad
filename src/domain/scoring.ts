@@ -42,6 +42,22 @@ export function computeRoundScores(
   entry: RoundEntry,
   players: Player[],
   scoring: ScoringConfig,
+  blind = false,
+): Record<PlayerId, number> {
+  const base = computeBaseRoundScores(entry, players, scoring);
+  if (!blind) return base;
+  const m = scoring.blindMultiplier;
+  const out: Record<PlayerId, number> = {};
+  for (const [id, v] of Object.entries(base)) {
+    out[id] = v * m + 0;
+  }
+  return out;
+}
+
+function computeBaseRoundScores(
+  entry: RoundEntry,
+  players: Player[],
+  scoring: ScoringConfig,
 ): Record<PlayerId, number> {
   switch (entry.contract) {
     case 'noTricks':

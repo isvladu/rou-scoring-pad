@@ -44,6 +44,7 @@
     "playerNamePlaceholder": "Jucător {{n}}",
     "scoringOverrides": "Punctaj (avansat)",
     "scoringHint": "Valorile implicite pot fi editate pentru fiecare joc.",
+    "blindMultiplier": "Multiplicator pe nevăzute",
     "start": "Începe jocul",
     "nameRequired": "Toate numele jucătorilor sunt obligatorii."
   },
@@ -58,6 +59,10 @@
     "dealerIs": "{{name}} împarte",
     "picksLabel": "alege",
     "pickContract": "Alege un contract",
+    "blindToggle": "Pe nevăzute",
+    "blindHelp": "Alege înainte de a te uita la cărți. Înmulțește scorul rundei cu ×{{m}}.",
+    "blindUnavailable": "Pe nevăzute nu se poate juca la ultimul contract rămas.",
+    "blindBadge": "PE NEVĂZUTE",
     "noContractsLeft": "{{name}} a ales toate contractele.",
     "lastRound": "Ultima rundă",
     "undoRound": "Anulează ultima rundă"

@@ -14,6 +14,7 @@ function fakeRound(
   return {
     index,
     pickerId,
+    blind: false,
     entry:
       contract === 'rentz'
         ? { contract: 'rentz', finishingOrder: [] }
