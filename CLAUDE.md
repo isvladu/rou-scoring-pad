@@ -19,7 +19,12 @@ The app models a specific Romanian Rentz variant. Treat these as authoritative �
 
 **Player counts**: 4, 5, or 6. Decks are 32 (4p, 7→A), 40 (5p, 5→A), 48 (6p, 3→A). Always 8 tricks per hand.
 
-**Rotation rule**: full rotation — each player deals each contract exactly once. Game length is `players × 8` rounds (32 / 40 / 48). Dealer picks any contract from those they have not yet dealt; the picker UI hides already-dealt ones for the current dealer.
+**Rotation rule** — two distinct roles per round:
+
+- **Picker** (`Round.pickerId`, `RotationState.currentPickerId`) — the player whose turn it is to choose the contract and lead play. The rotation index advances by picker; `picker = players[roundsPlayed % N]`.
+- **Dealer** (`RotationState.currentDealerId`, derived via `dealerForPicker`) — the player who deals the cards this round, always the seat **immediately before the picker** (wraps to the last seat for the first picker). Not stored on `Round` since it's pure-derivable from `pickerId` and the player order.
+
+Full rotation — each player **picks** each contract exactly once. Game length is `players × 8` rounds (32 / 40 / 48). The ContractPicker screen hides contracts the current picker has already chosen.
 
 ## Architecture invariants
 

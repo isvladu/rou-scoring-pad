@@ -54,9 +54,11 @@
     "endGame": "End game",
     "endGameConfirm": "End the game now?",
     "roundOf": "Round {{n}} of {{total}}",
+    "pickerIs": "{{name}} picks the contract",
     "dealerIs": "{{name}} deals",
+    "picksLabel": "picks",
     "pickContract": "Pick a contract",
-    "noContractsLeft": "{{name}} has dealt all contracts.",
+    "noContractsLeft": "{{name}} has picked all contracts.",
     "lastRound": "Last round",
     "undoRound": "Undo last round"
   },

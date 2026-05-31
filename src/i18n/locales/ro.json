@@ -54,9 +54,11 @@
     "endGame": "Încheie jocul",
     "endGameConfirm": "Închei jocul acum?",
     "roundOf": "Runda {{n}} din {{total}}",
+    "pickerIs": "{{name}} alege contractul",
     "dealerIs": "{{name}} împarte",
+    "picksLabel": "alege",
     "pickContract": "Alege un contract",
-    "noContractsLeft": "{{name}} a împărțit toate contractele.",
+    "noContractsLeft": "{{name}} a ales toate contractele.",
     "lastRound": "Ultima rundă",
     "undoRound": "Anulează ultima rundă"
   },
@@ -106,7 +108,7 @@
     "tricks": "Levate",
     "diamonds": "Carouri",
     "queens": "Dame",
-    "kingOfHearts": "Cine a luat P♥?",
+    "kingOfHearts": "Cine a luat K♥?",
     "tenOfClubs": "Cine a luat 10♣?",
     "finishingOrder": "Ordinea terminării",
     "finishingOrderHint": "Atinge jucătorii în ordine, de la primul la ultimul.",
@@ -119,7 +121,7 @@
     "tabTricks": "Levate",
     "tabDiamonds": "Caro",
     "tabQueens": "Dame",
-    "tabKing": "P♥"
+    "tabKing": "K♥"
   },
   "summary": {
     "title": "Clasament final",

@@ -20,6 +20,7 @@ export default function GameScreen() {
 
   const rot = rotation();
   if (!rot) return null;
+  const picker = active.players.find((p) => p.id === rot.currentPickerId);
   const dealer = active.players.find((p) => p.id === rot.currentDealerId);
 
   return (
@@ -29,11 +30,16 @@ export default function GameScreen() {
           {t('game.roundOf', { n: rot.roundsPlayed + 1, total: rot.totalRounds })}
         </div>
         <h2 className="text-lg font-medium text-slate-100">
-          {dealer ? t('game.dealerIs', { name: dealer.name }) : ''}
+          {picker ? t('game.pickerIs', { name: picker.name }) : ''}
         </h2>
+        {dealer && (
+          <p className="text-xs text-slate-500">
+            {t('game.dealerIs', { name: dealer.name })}
+          </p>
+        )}
       </section>
 
-      <Scoreboard game={active} highlightDealerId={rot.currentDealerId} />
+      <Scoreboard game={active} highlightPickerId={rot.currentPickerId} />
 
       <details className="rounded-lg border border-slate-800 bg-slate-900/50 p-3">
         <summary className="cursor-pointer text-sm text-slate-400">{t('game.rotation')}</summary>

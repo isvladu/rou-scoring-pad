@@ -60,7 +60,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       throw new Error(validation.errors.join(' '));
     }
     const rotation = computeRotation(game.players, game.rounds);
-    if (!rotation.currentDealerId) throw new Error('Game already finished');
+    if (!rotation.currentPickerId) throw new Error('Game already finished');
     const scores = computeRoundScores(entry, game.players, game.scoring);
     const updated: Game = {
       ...game,
@@ -68,7 +68,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...game.rounds,
         {
           index: rotation.currentRoundIndex,
-          dealerId: rotation.currentDealerId,
+          pickerId: rotation.currentPickerId,
           entry,
           scores,
           committedAt: new Date().toISOString(),

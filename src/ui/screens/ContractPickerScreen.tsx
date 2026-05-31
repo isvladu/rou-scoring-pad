@@ -15,17 +15,23 @@ export default function ContractPickerScreen() {
 
   if (!active || active.id !== id) return <p className="text-slate-400">…</p>;
   const rot = rotation();
-  if (!rot || !rot.currentDealerId) {
+  if (!rot || !rot.currentPickerId) {
     navigate(`/game/${active.id}/summary`, { replace: true });
     return null;
   }
+  const picker = active.players.find((p) => p.id === rot.currentPickerId);
   const dealer = active.players.find((p) => p.id === rot.currentDealerId);
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
-      <div className="text-sm uppercase tracking-wide text-slate-400">
-        {dealer ? t('game.dealerIs', { name: dealer.name }) : ''}
+      <div className="text-sm font-medium text-slate-200">
+        {picker ? t('game.pickerIs', { name: picker.name }) : ''}
       </div>
+      {dealer && (
+        <div className="-mt-3 text-xs text-slate-500">
+          {t('game.dealerIs', { name: dealer.name })}
+        </div>
+      )}
       <h2 className="text-xl font-semibold text-slate-100">{t('game.pickContract')}</h2>
       <ul className="space-y-2">
         {rot.legalContracts.map((c) => (

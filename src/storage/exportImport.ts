@@ -26,13 +26,28 @@ const RoundEntrySchema: z.ZodType<RoundEntry> = z.discriminatedUnion('contract',
   }),
 ]);
 
-const RoundSchema = z.object({
-  index: z.number(),
-  dealerId: z.string(),
-  entry: RoundEntrySchema,
-  scores: z.record(z.string(), z.number()),
-  committedAt: z.string(),
-});
+const RoundSchema = z.preprocess(
+  (val) => {
+    // Accept legacy exports that used `dealerId` for what is now `pickerId`.
+    if (
+      val &&
+      typeof val === 'object' &&
+      'dealerId' in val &&
+      !('pickerId' in (val as Record<string, unknown>))
+    ) {
+      const { dealerId, ...rest } = val as Record<string, unknown>;
+      return { ...rest, pickerId: dealerId };
+    }
+    return val;
+  },
+  z.object({
+    index: z.number(),
+    pickerId: z.string(),
+    entry: RoundEntrySchema,
+    scores: z.record(z.string(), z.number()),
+    committedAt: z.string(),
+  }),
+);
 
 const ScoringSchema = z.object({
   noTricks: z.object({ perTrick: z.number() }),

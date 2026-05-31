@@ -54,7 +54,8 @@ export type RoundEntry =
 
 export interface Round {
   index: number;
-  dealerId: PlayerId;
+  /** The player whose turn it is to pick the contract and lead play. */
+  pickerId: PlayerId;
   entry: RoundEntry;
   scores: Record<PlayerId, number>;
   committedAt: string;

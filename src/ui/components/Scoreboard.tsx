@@ -1,32 +1,38 @@
+import { useTranslation } from 'react-i18next';
 import type { Game } from '../../domain/types';
 import { totalScores } from '../../domain/scoring';
 
 interface Props {
   game: Game;
-  highlightDealerId?: string | null;
+  highlightPickerId?: string | null;
 }
 
-export default function Scoreboard({ game, highlightDealerId }: Props) {
+export default function Scoreboard({ game, highlightPickerId }: Props) {
+  const { t } = useTranslation();
   const totals = totalScores(game.players, game.rounds);
   const ranked = [...game.players].sort((a, b) => (totals[b.id] ?? 0) - (totals[a.id] ?? 0));
   return (
     <div className="grid grid-cols-1 gap-2">
       {ranked.map((p) => {
         const score = totals[p.id] ?? 0;
-        const isDealer = p.id === highlightDealerId;
+        const isPicker = p.id === highlightPickerId;
         return (
           <div
             key={p.id}
             className={
               'flex items-baseline justify-between rounded-lg border px-4 py-3 ' +
-              (isDealer
+              (isPicker
                 ? 'border-brand-500 bg-brand-500/10'
                 : 'border-slate-800 bg-slate-900')
             }
           >
             <div className="flex items-baseline gap-2">
               <span className="text-lg font-medium text-slate-100">{p.name}</span>
-              {isDealer && <span className="text-[10px] uppercase text-brand-500">·deals</span>}
+              {isPicker && (
+                <span className="text-[10px] uppercase text-brand-500">
+                  ·{t('game.picksLabel')}
+                </span>
+              )}
             </div>
             <span
               className={

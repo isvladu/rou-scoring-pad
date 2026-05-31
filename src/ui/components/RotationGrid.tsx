@@ -12,7 +12,7 @@ export default function RotationGrid({ players, rounds, rotation }: Props) {
   const { t } = useTranslation();
   const playedMap = new Map<string, string>();
   for (const r of rounds) {
-    playedMap.set(`${r.dealerId}:${r.entry.contract}`, '·');
+    playedMap.set(`${r.pickerId}:${r.entry.contract}`, '·');
   }
 
   return (
@@ -21,7 +21,7 @@ export default function RotationGrid({ players, rounds, rotation }: Props) {
         <thead>
           <tr>
             <th className="sticky left-0 z-10 bg-slate-950 px-2 py-1 text-left font-medium text-slate-400">
-              {t('common.dealer')}
+              {t('common.player')}
             </th>
             {ALL_CONTRACTS.map((c) => (
               <th
@@ -40,7 +40,7 @@ export default function RotationGrid({ players, rounds, rotation }: Props) {
               <td
                 className={
                   'sticky left-0 z-10 bg-slate-950 px-2 py-1 text-left text-slate-200 ' +
-                  (p.id === rotation.currentDealerId ? 'font-bold text-brand-500' : '')
+                  (p.id === rotation.currentPickerId ? 'font-bold text-brand-500' : '')
                 }
               >
                 {p.name}
@@ -48,7 +48,7 @@ export default function RotationGrid({ players, rounds, rotation }: Props) {
               {ALL_CONTRACTS.map((c) => {
                 const played = playedMap.has(`${p.id}:${c}`);
                 const isCurrent =
-                  p.id === rotation.currentDealerId && rotation.legalContracts.includes(c);
+                  p.id === rotation.currentPickerId && rotation.legalContracts.includes(c);
                 return (
                   <td
                     key={c}
