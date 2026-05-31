@@ -1,0 +1,130 @@
+{
+  "app": {
+    "title": "Rentz",
+    "tagline": "Caiet de scor offline"
+  },
+  "common": {
+    "save": "Salvează",
+    "cancel": "Anulează",
+    "back": "Înapoi",
+    "next": "Următorul",
+    "finish": "Termină",
+    "delete": "Șterge",
+    "confirm": "Confirmă",
+    "edit": "Editează",
+    "remove": "Elimină",
+    "yes": "Da",
+    "no": "Nu",
+    "player": "Jucător",
+    "players": "Jucători",
+    "dealer": "Împărțitor",
+    "round": "Runda",
+    "rounds": "Runde",
+    "total": "Total",
+    "points": "puncte",
+    "language": "Limbă",
+    "english": "Engleză",
+    "romanian": "Română",
+    "updateAvailable": "Actualizare disponibilă",
+    "reload": "Reîncarcă"
+  },
+  "home": {
+    "newGame": "Joc nou",
+    "noGames": "Niciun joc salvat.",
+    "inProgress": "În desfășurare",
+    "finished": "Terminat",
+    "importGame": "Importă",
+    "deleteConfirm": "Ștergi acest joc?",
+    "createdAt": "Creat"
+  },
+  "newGame": {
+    "title": "Joc nou",
+    "playerCount": "Număr de jucători",
+    "playerName": "Numele jucătorului {{n}}",
+    "playerNamePlaceholder": "Jucător {{n}}",
+    "scoringOverrides": "Punctaj (avansat)",
+    "scoringHint": "Valorile implicite pot fi editate pentru fiecare joc.",
+    "start": "Începe jocul",
+    "nameRequired": "Toate numele jucătorilor sunt obligatorii."
+  },
+  "game": {
+    "scoreboard": "Tabel de scor",
+    "rotation": "Rotație",
+    "nextRound": "Runda următoare",
+    "endGame": "Încheie jocul",
+    "endGameConfirm": "Închei jocul acum?",
+    "roundOf": "Runda {{n}} din {{total}}",
+    "dealerIs": "{{name}} împarte",
+    "pickContract": "Alege un contract",
+    "noContractsLeft": "{{name}} a împărțit toate contractele.",
+    "lastRound": "Ultima rundă",
+    "undoRound": "Anulează ultima rundă"
+  },
+  "contracts": {
+    "noTricks": {
+      "label": "Fără Levate",
+      "short": "Levate",
+      "kind": "Negativ — evită levatele"
+    },
+    "noDiamonds": {
+      "label": "Fără Carouri",
+      "short": "♦",
+      "kind": "Negativ — evită carourile"
+    },
+    "noQueens": {
+      "label": "Fără Dame",
+      "short": "D",
+      "kind": "Negativ — evită damele"
+    },
+    "noKingOfHearts": {
+      "label": "Fără Popa de Cupă",
+      "short": "P♥",
+      "kind": "Negativ — un singur jucător"
+    },
+    "tenOfClubs": {
+      "label": "10 de Treflă",
+      "short": "10♣",
+      "kind": "Pozitiv — un singur jucător"
+    },
+    "totals": {
+      "label": "Totale",
+      "short": "Tot.",
+      "kind": "Toate contractele negative combinate"
+    },
+    "whist": {
+      "label": "Whist",
+      "short": "W",
+      "kind": "Per levată luată (fără licitație)"
+    },
+    "rentz": {
+      "label": "Rentz",
+      "short": "R",
+      "kind": "Clasament după ordinea terminării"
+    }
+  },
+  "roundEntry": {
+    "tricks": "Levate",
+    "diamonds": "Carouri",
+    "queens": "Dame",
+    "kingOfHearts": "Cine a luat P♥?",
+    "tenOfClubs": "Cine a luat 10♣?",
+    "finishingOrder": "Ordinea terminării",
+    "finishingOrderHint": "Atinge jucătorii în ordine, de la primul la ultimul.",
+    "preview": "Previzualizare",
+    "expectedSum": "Sumă așteptată: {{n}}",
+    "currentSum": "Sumă curentă: {{n}}",
+    "sumMismatch": "Suma trebuie să fie {{n}}.",
+    "needTaker": "Alege un jucător.",
+    "needAllRanked": "Clasează toți jucătorii.",
+    "tabTricks": "Levate",
+    "tabDiamonds": "Caro",
+    "tabQueens": "Dame",
+    "tabKing": "P♥"
+  },
+  "summary": {
+    "title": "Clasament final",
+    "winner": "Câștigător: {{name}}",
+    "exportJson": "Exportă JSON",
+    "backHome": "Înapoi acasă"
+  }
+}

@@ -1,0 +1,101 @@
+import { z } from 'zod';
+import type { Game, GameStatus, RoundEntry } from '../domain/types';
+import { saveGame } from './gamesRepo';
+
+const PlayerSchema = z.object({ id: z.string(), name: z.string() });
+
+const RoundEntrySchema: z.ZodType<RoundEntry> = z.discriminatedUnion('contract', [
+  z.object({
+    contract: z.enum(['noTricks', 'noDiamonds', 'noQueens', 'whist']),
+    counts: z.record(z.string(), z.number()),
+  }),
+  z.object({
+    contract: z.enum(['noKingOfHearts', 'tenOfClubs']),
+    takerId: z.string(),
+  }),
+  z.object({
+    contract: z.literal('totals'),
+    tricks: z.record(z.string(), z.number()),
+    diamonds: z.record(z.string(), z.number()),
+    queens: z.record(z.string(), z.number()),
+    kingOfHeartsTakerId: z.string(),
+  }),
+  z.object({
+    contract: z.literal('rentz'),
+    finishingOrder: z.array(z.string()),
+  }),
+]);
+
+const RoundSchema = z.object({
+  index: z.number(),
+  dealerId: z.string(),
+  entry: RoundEntrySchema,
+  scores: z.record(z.string(), z.number()),
+  committedAt: z.string(),
+});
+
+const ScoringSchema = z.object({
+  noTricks: z.object({ perTrick: z.number() }),
+  noDiamonds: z.object({ perDiamond: z.number() }),
+  noQueens: z.object({ perQueen: z.number() }),
+  noKingOfHearts: z.object({ takingIt: z.number() }),
+  tenOfClubs: z.object({ takingIt: z.number() }),
+  totals: z.object({ multiplier: z.number() }),
+  whist: z.object({ perTrick: z.number() }),
+  rentz: z.object({
+    byPosition: z.object({
+      4: z.array(z.number()),
+      5: z.array(z.number()),
+      6: z.array(z.number()),
+    }),
+  }),
+});
+
+const GameSchema = z.object({
+  id: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  players: z.array(PlayerSchema).min(4).max(6),
+  scoring: ScoringSchema,
+  rounds: z.array(RoundSchema),
+  status: z.custom<GameStatus>((v) => v === 'in_progress' || v === 'finished'),
+});
+
+const ExportSchema = z.object({
+  format: z.literal('rentz-scoring-app'),
+  version: z.literal(1),
+  exportedAt: z.string(),
+  games: z.array(GameSchema),
+});
+
+export type ExportPayload = z.infer<typeof ExportSchema>;
+
+export function serializeGames(games: Game[]): string {
+  const payload: ExportPayload = {
+    format: 'rentz-scoring-app',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    games,
+  };
+  return JSON.stringify(payload, null, 2);
+}
+
+export async function importGamesFromJson(json: string): Promise<number> {
+  const parsed = ExportSchema.parse(JSON.parse(json));
+  for (const game of parsed.games) {
+    await saveGame(game as Game);
+  }
+  return parsed.games.length;
+}
+
+export function triggerDownload(filename: string, content: string): void {
+  const blob = new Blob([content], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}

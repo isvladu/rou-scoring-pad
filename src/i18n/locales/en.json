@@ -1,0 +1,130 @@
+{
+  "app": {
+    "title": "Rentz",
+    "tagline": "Offline scoring pad"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "edit": "Edit",
+    "remove": "Remove",
+    "yes": "Yes",
+    "no": "No",
+    "player": "Player",
+    "players": "Players",
+    "dealer": "Dealer",
+    "round": "Round",
+    "rounds": "Rounds",
+    "total": "Total",
+    "points": "points",
+    "language": "Language",
+    "english": "English",
+    "romanian": "Romanian",
+    "updateAvailable": "Update available",
+    "reload": "Reload"
+  },
+  "home": {
+    "newGame": "New game",
+    "noGames": "No saved games yet.",
+    "inProgress": "In progress",
+    "finished": "Finished",
+    "importGame": "Import",
+    "deleteConfirm": "Delete this game?",
+    "createdAt": "Created"
+  },
+  "newGame": {
+    "title": "New game",
+    "playerCount": "Number of players",
+    "playerName": "Player {{n}} name",
+    "playerNamePlaceholder": "Player {{n}}",
+    "scoringOverrides": "Scoring (advanced)",
+    "scoringHint": "Default values can be edited per game.",
+    "start": "Start game",
+    "nameRequired": "All player names are required."
+  },
+  "game": {
+    "scoreboard": "Scoreboard",
+    "rotation": "Rotation",
+    "nextRound": "Next round",
+    "endGame": "End game",
+    "endGameConfirm": "End the game now?",
+    "roundOf": "Round {{n}} of {{total}}",
+    "dealerIs": "{{name}} deals",
+    "pickContract": "Pick a contract",
+    "noContractsLeft": "{{name}} has dealt all contracts.",
+    "lastRound": "Last round",
+    "undoRound": "Undo last round"
+  },
+  "contracts": {
+    "noTricks": {
+      "label": "No Tricks",
+      "short": "Tricks",
+      "kind": "Negative — avoid tricks"
+    },
+    "noDiamonds": {
+      "label": "No Diamonds",
+      "short": "♦",
+      "kind": "Negative — avoid diamonds"
+    },
+    "noQueens": {
+      "label": "No Queens",
+      "short": "Q",
+      "kind": "Negative — avoid queens"
+    },
+    "noKingOfHearts": {
+      "label": "No King of Hearts",
+      "short": "K♥",
+      "kind": "Negative — one taker"
+    },
+    "tenOfClubs": {
+      "label": "10 of Clubs",
+      "short": "10♣",
+      "kind": "Positive — one taker"
+    },
+    "totals": {
+      "label": "Totals",
+      "short": "Tot.",
+      "kind": "All negative contracts combined"
+    },
+    "whist": {
+      "label": "Whist",
+      "short": "W",
+      "kind": "Per trick taken (no bidding)"
+    },
+    "rentz": {
+      "label": "Rentz",
+      "short": "R",
+      "kind": "Finishing-order ranking"
+    }
+  },
+  "roundEntry": {
+    "tricks": "Tricks",
+    "diamonds": "Diamonds",
+    "queens": "Queens",
+    "kingOfHearts": "Who took K♥?",
+    "tenOfClubs": "Who took 10♣?",
+    "finishingOrder": "Finishing order",
+    "finishingOrderHint": "Tap players in order from first to last.",
+    "preview": "Preview",
+    "expectedSum": "Expected sum: {{n}}",
+    "currentSum": "Current sum: {{n}}",
+    "sumMismatch": "Sum must equal {{n}}.",
+    "needTaker": "Pick one player.",
+    "needAllRanked": "Rank every player.",
+    "tabTricks": "Tricks",
+    "tabDiamonds": "Diamonds",
+    "tabQueens": "Queens",
+    "tabKing": "K♥"
+  },
+  "summary": {
+    "title": "Final standings",
+    "winner": "Winner: {{name}}",
+    "exportJson": "Export JSON",
+    "backHome": "Back to home"
+  }
+}
