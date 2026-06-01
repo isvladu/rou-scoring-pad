@@ -4,6 +4,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useGameStore } from '../../state/gameStore';
 import Scoreboard from '../components/Scoreboard';
 import RotationGrid from '../components/RotationGrid';
+import RoundHistory from '../components/RoundHistory';
 
 export default function GameScreen() {
   const { t } = useTranslation();
@@ -40,6 +41,17 @@ export default function GameScreen() {
       </section>
 
       <Scoreboard game={active} highlightPickerId={rot.currentPickerId} />
+
+      {(active.rounds.length > 0 || active.rentzRefusals.length > 0) && (
+        <details className="rounded-lg border border-slate-800 bg-slate-900/50 p-3">
+          <summary className="cursor-pointer text-sm text-slate-400">
+            {t('history.title')}
+          </summary>
+          <div className="mt-3">
+            <RoundHistory game={active} />
+          </div>
+        </details>
+      )}
 
       <details className="rounded-lg border border-slate-800 bg-slate-900/50 p-3">
         <summary className="cursor-pointer text-sm text-slate-400">{t('game.rotation')}</summary>

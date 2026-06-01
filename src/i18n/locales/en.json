@@ -111,6 +111,11 @@
       "kind": "Finishing-order ranking"
     }
   },
+  "history": {
+    "title": "History",
+    "empty": "No rounds played yet.",
+    "refusalLine": "{{refuser}} refused {{picker}}'s Rentz"
+  },
   "rentzCheck": {
     "intro": "{{name}} wants to play Rentz. Anyone refusing?",
     "help": "To refuse, you must claim you hold at least the listed number of suit edges (aces and the lowest rank in this deck). The app records your refusals; the threshold rises after your first refusal.",

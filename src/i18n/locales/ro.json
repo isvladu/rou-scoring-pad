@@ -111,6 +111,11 @@
       "kind": "Clasament după ordinea terminării"
     }
   },
+  "history": {
+    "title": "Istoric",
+    "empty": "Nicio rundă jucată încă.",
+    "refusalLine": "{{refuser}} a refuzat Rentz-ul lui {{picker}}"
+  },
   "rentzCheck": {
     "intro": "{{name}} vrea să joace Rentz. Refuză cineva?",
     "help": "Pentru a refuza, trebuie să declari că ai cel puțin numărul de capete indicat (așii și cea mai mică valoare din acest pachet). Aplicația ține minte refuzurile; pragul crește după primul refuz.",

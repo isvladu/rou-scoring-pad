@@ -5,6 +5,7 @@ import { useGameStore } from '../../state/gameStore';
 import { totalScores } from '../../domain/scoring';
 import { serializeGames, triggerDownload } from '../../storage/exportImport';
 import Scoreboard from '../components/Scoreboard';
+import RoundHistory from '../components/RoundHistory';
 
 export default function GameSummaryScreen() {
   const { t } = useTranslation();
@@ -33,6 +34,14 @@ export default function GameSummaryScreen() {
         </div>
       )}
       <Scoreboard game={active} />
+      {(active.rounds.length > 0 || active.rentzRefusals.length > 0) && (
+        <section className="space-y-3">
+          <h3 className="text-sm uppercase tracking-wide text-slate-400">
+            {t('history.title')}
+          </h3>
+          <RoundHistory game={active} />
+        </section>
+      )}
       <div className="flex gap-2">
         <button
           type="button"
