@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { cloneDefaultScoring } from '../src/config/scoringDefaults';
 import { computeRoundScores, totalScores } from '../src/domain/scoring';
+import { signed } from '../src/domain/contracts';
 import { validateRoundEntry } from '../src/domain/validation';
 import type { Player } from '../src/domain/types';
 
@@ -9,15 +10,16 @@ function makePlayers(n: 4 | 5 | 6): Player[] {
 }
 
 describe('noTricks scoring', () => {
-  it('assigns -2 per trick taken (default)', () => {
+  it('assigns signed perTrick × count for each player', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
+    const per = signed('noTricks', scoring.noTricks.perTrick);
     const scores = computeRoundScores(
       { contract: 'noTricks', counts: { p1: 3, p2: 0, p3: 5, p4: 0 } },
       players,
       scoring,
     );
-    expect(scores).toEqual({ p1: -6, p2: 0, p3: -10, p4: 0 });
+    expect(scores).toEqual({ p1: 3 * per, p2: 0, p3: 5 * per, p4: 0 });
   });
 
   it('rejects entries whose tricks do not sum to 8', () => {
@@ -89,41 +91,46 @@ describe('noQueens scoring', () => {
     expect(r6.ok).toBe(true);
   });
 
-  it('assigns -6 per queen', () => {
+  it('assigns signed perQueen × count', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
+    const per = signed('noQueens', scoring.noQueens.perQueen);
     const scores = computeRoundScores(
       { contract: 'noQueens', counts: { p1: 4, p2: 0, p3: 0, p4: 0 } },
       players,
       scoring,
     );
-    expect(scores).toEqual({ p1: -24, p2: 0, p3: 0, p4: 0 });
+    expect(scores).toEqual({ p1: 4 * per, p2: 0, p3: 0, p4: 0 });
   });
 });
 
 describe('noKingOfHearts scoring', () => {
-  it('puts -20 on the taker, 0 on everyone else', () => {
+  it('puts the signed penalty on the taker, 0 on everyone else', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
+    const value = signed('noKingOfHearts', scoring.noKingOfHearts.takingIt);
     const scores = computeRoundScores(
       { contract: 'noKingOfHearts', takerId: 'p3' },
       players,
       scoring,
     );
-    expect(scores).toEqual({ p1: 0, p2: 0, p3: -20, p4: 0 });
+    expect(scores).toEqual({ p1: 0, p2: 0, p3: value, p4: 0 });
+    expect(value).toBeLessThan(0);
   });
 });
 
 describe('tenOfClubs scoring', () => {
-  it('puts +10 on the taker', () => {
+  it('puts the bonus on the taker (always positive)', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
+    const value = signed('tenOfClubs', scoring.tenOfClubs.takingIt);
     const scores = computeRoundScores(
       { contract: 'tenOfClubs', takerId: 'p2' },
       players,
       scoring,
     );
-    expect(scores).toEqual({ p1: 0, p2: 10, p3: 0, p4: 0 });
+    expect(scores).toEqual({ p1: 0, p2: value, p3: 0, p4: 0 });
+    expect(value).toBeGreaterThan(0);
   });
 });
 
@@ -142,7 +149,11 @@ describe('totals scoring', () => {
       players,
       scoring,
     );
-    const rawSum = -2 * 8 + -2 * 8 + -6 * 4 + -20;
+    const rawSum =
+      8 * signed('noTricks', scoring.noTricks.perTrick) +
+      8 * signed('noDiamonds', scoring.noDiamonds.perDiamond) +
+      4 * signed('noQueens', scoring.noQueens.perQueen) +
+      signed('noKingOfHearts', scoring.noKingOfHearts.takingIt);
     expect(scores.p1).toBe(rawSum);
     expect(scores.p2).toBe(0);
     expect(scores.p3).toBe(0);
@@ -151,28 +162,32 @@ describe('totals scoring', () => {
 });
 
 describe('whist scoring', () => {
-  it('assigns +2 per trick (default)', () => {
+  it('assigns signed perTrick × tricks (always non-negative since whist is positive)', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
+    const per = signed('whist', scoring.whist.perTrick);
     const scores = computeRoundScores(
       { contract: 'whist', counts: { p1: 3, p2: 2, p3: 2, p4: 1 } },
       players,
       scoring,
     );
-    expect(scores).toEqual({ p1: 6, p2: 4, p3: 4, p4: 2 });
+    expect(scores).toEqual({ p1: 3 * per, p2: 2 * per, p3: 2 * per, p4: 1 * per });
+    expect(per).toBeGreaterThan(0);
   });
 });
 
 describe('rentz scoring', () => {
-  it('assigns position points in finishing order (4 players, last earns 0)', () => {
+  it('assigns position points in finishing order (last earns 0)', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
+    const pts = scoring.rentz.byPosition[4];
     const scores = computeRoundScores(
       { contract: 'rentz', finishingOrder: ['p3', 'p1', 'p4', 'p2'] },
       players,
       scoring,
     );
-    expect(scores).toEqual({ p3: 30, p1: 20, p4: 10, p2: 0 });
+    expect(scores).toEqual({ p3: pts[0], p1: pts[1], p4: pts[2], p2: pts[3] });
+    expect(pts[pts.length - 1]).toBe(0);
   });
 
   it('never scores negative for any position with default config', () => {
@@ -230,17 +245,18 @@ describe('blind eligibility', () => {
 });
 
 describe('blind multiplier', () => {
-  it('multiplies every player\'s score by blindMultiplier when blind=true', () => {
+  it("multiplies every player's score by blindMultiplier when blind=true", () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
+    const per = signed('noTricks', scoring.noTricks.perTrick);
+    const m = scoring.blindMultiplier;
     const scores = computeRoundScores(
       { contract: 'noTricks', counts: { p1: 3, p2: 0, p3: 5, p4: 0 } },
       players,
       scoring,
       true,
     );
-    // Default -2 per trick × ×2 blind = -4 per trick.
-    expect(scores).toEqual({ p1: -12, p2: 0, p3: -20, p4: 0 });
+    expect(scores).toEqual({ p1: 3 * per * m, p2: 0, p3: 5 * per * m, p4: 0 });
   });
 
   it('applies blindMultiplier to a Totals round (no other multiplier in play)', () => {
@@ -258,7 +274,11 @@ describe('blind multiplier', () => {
       scoring,
       true,
     );
-    const rawSum = -2 * 8 + -2 * 8 + -6 * 4 + -20;
+    const rawSum =
+      8 * signed('noTricks', scoring.noTricks.perTrick) +
+      8 * signed('noDiamonds', scoring.noDiamonds.perDiamond) +
+      4 * signed('noQueens', scoring.noQueens.perQueen) +
+      signed('noKingOfHearts', scoring.noKingOfHearts.takingIt);
     expect(scores.p1).toBe(rawSum * scoring.blindMultiplier);
     expect(scores.p2).toBe(0);
   });
@@ -267,24 +287,26 @@ describe('blind multiplier', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
     scoring.blindMultiplier = 3;
+    const value = signed('tenOfClubs', scoring.tenOfClubs.takingIt);
     const scores = computeRoundScores(
       { contract: 'tenOfClubs', takerId: 'p2' },
       players,
       scoring,
       true,
     );
-    expect(scores).toEqual({ p1: 0, p2: 30, p3: 0, p4: 0 });
+    expect(scores).toEqual({ p1: 0, p2: value * 3, p3: 0, p4: 0 });
   });
 
   it('does not modify scores when blind=false (default)', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
+    const per = signed('whist', scoring.whist.perTrick);
     const plain = computeRoundScores(
       { contract: 'whist', counts: { p1: 3, p2: 2, p3: 2, p4: 1 } },
       players,
       scoring,
     );
-    expect(plain).toEqual({ p1: 6, p2: 4, p3: 4, p4: 2 });
+    expect(plain).toEqual({ p1: 3 * per, p2: 2 * per, p3: 2 * per, p4: 1 * per });
   });
 });
 

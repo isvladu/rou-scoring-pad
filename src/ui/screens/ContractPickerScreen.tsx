@@ -86,11 +86,18 @@ export default function ContractPickerScreen() {
               <button
                 type="button"
                 disabled={lockedByBlind}
-                onClick={() =>
+                onClick={() => {
+                  console.log('[rentz/picker] contract selected', {
+                    roundIndex: rot.currentRoundIndex,
+                    picker: { id: rot.currentPickerId, name: picker?.name },
+                    dealer: { id: rot.currentDealerId, name: dealer?.name },
+                    contract: c,
+                    blind: submitBlind,
+                  });
                   navigate(
                     `/game/${active.id}/round/${c}${submitBlind ? '?blind=1' : ''}`,
-                  )
-                }
+                  );
+                }}
                 className={
                   'flex w-full items-center justify-between rounded-lg border px-4 py-4 text-left transition-colors ' +
                   (lockedByBlind

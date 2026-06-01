@@ -46,12 +46,25 @@ export function computeRoundScores(
   blind = false,
 ): Record<PlayerId, number> {
   const base = computeBaseRoundScores(entry, players, scoring);
-  if (!blind) return base;
+  if (!blind) {
+    console.log('[rentz/scoring] result', {
+      contract: entry.contract,
+      blind: false,
+      scores: base,
+    });
+    return base;
+  }
   const m = scoring.blindMultiplier;
   const out: Record<PlayerId, number> = {};
   for (const [id, v] of Object.entries(base)) {
     out[id] = v * m + 0;
   }
+  console.log('[rentz/scoring] result (blind)', {
+    contract: entry.contract,
+    blindMultiplier: m,
+    base,
+    scores: out,
+  });
   return out;
 }
 
@@ -61,54 +74,58 @@ function computeBaseRoundScores(
   scoring: ScoringConfig,
 ): Record<PlayerId, number> {
   switch (entry.contract) {
-    case 'noTricks':
-      return counterScores(players, entry.counts, signed('noTricks', scoring.noTricks.perTrick));
-    case 'noDiamonds':
-      return counterScores(
-        players,
-        entry.counts,
-        signed('noDiamonds', scoring.noDiamonds.perDiamond),
-      );
-    case 'noQueens':
-      return counterScores(players, entry.counts, signed('noQueens', scoring.noQueens.perQueen));
-    case 'whist':
-      return counterScores(players, entry.counts, signed('whist', scoring.whist.perTrick));
-    case 'noKingOfHearts':
-      return takerScores(
-        players,
-        entry.takerId,
-        signed('noKingOfHearts', scoring.noKingOfHearts.takingIt),
-      );
-    case 'tenOfClubs':
-      return takerScores(
-        players,
-        entry.takerId,
-        signed('tenOfClubs', scoring.tenOfClubs.takingIt),
-      );
+    case 'noTricks': {
+      const perUnit = signed('noTricks', scoring.noTricks.perTrick);
+      console.log('[rentz/scoring] noTricks', { perUnit, counts: entry.counts });
+      return counterScores(players, entry.counts, perUnit);
+    }
+    case 'noDiamonds': {
+      const perUnit = signed('noDiamonds', scoring.noDiamonds.perDiamond);
+      console.log('[rentz/scoring] noDiamonds', { perUnit, counts: entry.counts });
+      return counterScores(players, entry.counts, perUnit);
+    }
+    case 'noQueens': {
+      const perUnit = signed('noQueens', scoring.noQueens.perQueen);
+      console.log('[rentz/scoring] noQueens', { perUnit, counts: entry.counts });
+      return counterScores(players, entry.counts, perUnit);
+    }
+    case 'whist': {
+      const perUnit = signed('whist', scoring.whist.perTrick);
+      console.log('[rentz/scoring] whist', { perUnit, counts: entry.counts });
+      return counterScores(players, entry.counts, perUnit);
+    }
+    case 'noKingOfHearts': {
+      const value = signed('noKingOfHearts', scoring.noKingOfHearts.takingIt);
+      console.log('[rentz/scoring] noKingOfHearts', { value, takerId: entry.takerId });
+      return takerScores(players, entry.takerId, value);
+    }
+    case 'tenOfClubs': {
+      const value = signed('tenOfClubs', scoring.tenOfClubs.takingIt);
+      console.log('[rentz/scoring] tenOfClubs', { value, takerId: entry.takerId });
+      return takerScores(players, entry.takerId, value);
+    }
     case 'totals': {
       // Each sub-component gets signed per its own contract metadata, so a
       // future "totals includes a positive contract" change wouldn't need
       // hand-tuning here.
-      const tricks = counterScores(
-        players,
-        entry.tricks,
-        signed('noTricks', scoring.noTricks.perTrick),
-      );
-      const diamonds = counterScores(
-        players,
-        entry.diamonds,
-        signed('noDiamonds', scoring.noDiamonds.perDiamond),
-      );
-      const queens = counterScores(
-        players,
-        entry.queens,
-        signed('noQueens', scoring.noQueens.perQueen),
-      );
-      const king = takerScores(
-        players,
-        entry.kingOfHeartsTakerId,
-        signed('noKingOfHearts', scoring.noKingOfHearts.takingIt),
-      );
+      const perTrick = signed('noTricks', scoring.noTricks.perTrick);
+      const perDiamond = signed('noDiamonds', scoring.noDiamonds.perDiamond);
+      const perQueen = signed('noQueens', scoring.noQueens.perQueen);
+      const kingValue = signed('noKingOfHearts', scoring.noKingOfHearts.takingIt);
+      console.log('[rentz/scoring] totals', {
+        perTrick,
+        perDiamond,
+        perQueen,
+        kingValue,
+        tricks: entry.tricks,
+        diamonds: entry.diamonds,
+        queens: entry.queens,
+        kingOfHeartsTakerId: entry.kingOfHeartsTakerId,
+      });
+      const tricks = counterScores(players, entry.tricks, perTrick);
+      const diamonds = counterScores(players, entry.diamonds, perDiamond);
+      const queens = counterScores(players, entry.queens, perQueen);
+      const king = takerScores(players, entry.kingOfHeartsTakerId, kingValue);
       return sumRecords(tricks, diamonds, queens, king);
     }
     case 'rentz': {
@@ -117,6 +134,10 @@ function computeBaseRoundScores(
       if (!positionPoints || positionPoints.length !== players.length) {
         throw new Error(`No Rentz position points configured for ${players.length} players`);
       }
+      console.log('[rentz/scoring] rentz', {
+        positionPoints,
+        finishingOrder: entry.finishingOrder,
+      });
       const scores = zeroScores(players);
       entry.finishingOrder.forEach((pid, idx) => {
         scores[pid] = positionPoints[idx];
