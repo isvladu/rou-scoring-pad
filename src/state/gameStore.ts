@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Game, Player, RoundEntry } from '../domain/types';
+import type { Game, Player, PlayerId, RoundEntry } from '../domain/types';
 import { computeRotation, type RotationState } from '../domain/rotation';
 import { computeRoundScores, totalScores } from '../domain/scoring';
 import { validateRoundEntry } from '../domain/validation';
@@ -13,6 +13,7 @@ interface GameStore {
   load(id: string): Promise<void>;
   startGame(players: Player[], scoring?: ScoringConfig): Promise<Game>;
   commitRound(entry: RoundEntry, options?: { blind?: boolean }): Promise<void>;
+  recordRentzRefusal(refuserId: PlayerId): Promise<void>;
   undoLastRound(): Promise<void>;
   finish(): Promise<void>;
   clear(): void;
@@ -46,11 +47,35 @@ export const useGameStore = create<GameStore>((set, get) => ({
       players,
       scoring: scoring ?? cloneDefaultScoring(),
       rounds: [],
+      rentzRefusals: [],
       status: 'in_progress',
     };
     await saveGame(game);
     set({ active: game });
     return game;
+  },
+
+  async recordRentzRefusal(refuserId) {
+    const game = get().active;
+    if (!game) throw new Error('No active game');
+    const rotation = computeRotation(game.players, game.rounds);
+    if (!rotation.currentPickerId) throw new Error('Game already finished');
+    if (refuserId === rotation.currentPickerId) {
+      throw new Error('Picker cannot refuse their own Rentz');
+    }
+    const refusal = {
+      pickerId: rotation.currentPickerId,
+      refuserId,
+      occurredAt: new Date().toISOString(),
+    };
+    console.log('[rentz/refusal] recorded', refusal);
+    const updated: Game = {
+      ...game,
+      rentzRefusals: [...game.rentzRefusals, refusal],
+      updatedAt: new Date().toISOString(),
+    };
+    await saveGame(updated);
+    set({ active: updated });
   },
 
   async commitRound(entry, options = {}) {

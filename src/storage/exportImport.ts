@@ -96,15 +96,33 @@ const ScoringSchema = z.preprocess(
   }),
 );
 
-const GameSchema = z.object({
-  id: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  players: z.array(PlayerSchema).min(4).max(6),
-  scoring: ScoringSchema,
-  rounds: z.array(RoundSchema),
-  status: z.custom<GameStatus>((v) => v === 'in_progress' || v === 'finished'),
+const RentzRefusalSchema = z.object({
+  pickerId: z.string(),
+  refuserId: z.string(),
+  occurredAt: z.string(),
 });
+
+const GameSchema = z.preprocess(
+  (val) => {
+    if (!val || typeof val !== 'object') return val;
+    const rec = val as Record<string, unknown>;
+    // Older exports lacked `rentzRefusals`; default to empty.
+    if (!('rentzRefusals' in rec)) {
+      return { ...rec, rentzRefusals: [] };
+    }
+    return rec;
+  },
+  z.object({
+    id: z.string(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    players: z.array(PlayerSchema).min(4).max(6),
+    scoring: ScoringSchema,
+    rounds: z.array(RoundSchema),
+    rentzRefusals: z.array(RentzRefusalSchema),
+    status: z.custom<GameStatus>((v) => v === 'in_progress' || v === 'finished'),
+  }),
+);
 
 const ExportSchema = z.object({
   format: z.literal('rentz-scoring-app'),

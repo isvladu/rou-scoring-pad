@@ -9,6 +9,7 @@ import NewGameScreen from "./ui/screens/NewGameScreen";
 import GameScreen from "./ui/screens/GameScreen";
 import ContractPickerScreen from "./ui/screens/ContractPickerScreen";
 import RoundEntryScreen from "./ui/screens/RoundEntryScreen";
+import RentzCheckScreen from "./ui/screens/RentzCheckScreen";
 import GameSummaryScreen from "./ui/screens/GameSummaryScreen";
 import AppHeader from "./ui/components/AppHeader";
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/new" element={<NewGameScreen />} />
             <Route path="/game/:id" element={<GameScreen />} />
             <Route path="/game/:id/pick" element={<ContractPickerScreen />} />
+            <Route path="/game/:id/rentz-check" element={<RentzCheckScreen />} />
             <Route
               path="/game/:id/round/:contract"
               element={<RoundEntryScreen />}

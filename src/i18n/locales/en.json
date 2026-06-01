@@ -110,6 +110,14 @@
       "kind": "Finishing-order ranking"
     }
   },
+  "rentzCheck": {
+    "intro": "{{name}} wants to play Rentz. Anyone refusing?",
+    "help": "To refuse, you must claim you hold at least the listed number of suit edges (aces and the lowest rank in this deck). The app records your refusals; the threshold rises after your first refusal.",
+    "statusLine": "Refused {{count}} time(s) — needs {{threshold}} suit edges to refuse",
+    "refuse": "Refuse",
+    "proceed": "Nobody refuses — proceed",
+    "refusedAlert": "{{name}} refused. Shuffle and pick again."
+  },
   "roundEntry": {
     "tricks": "Tricks",
     "diamonds": "Diamonds",

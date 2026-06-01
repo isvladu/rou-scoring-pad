@@ -19,6 +19,7 @@ function sampleGame(id: string): Game {
     ],
     scoring: cloneDefaultScoring(),
     rounds: [],
+    rentzRefusals: [],
     status: 'in_progress',
   };
 }

@@ -10,7 +10,7 @@ interface RentzDB extends DBSchema {
 }
 
 const DB_NAME = 'rentz';
-const DB_VERSION = 5;
+const DB_VERSION = 6;
 
 let dbPromise: Promise<IDBPDatabase<RentzDB>> | null = null;
 
@@ -126,6 +126,21 @@ export function getDb(): Promise<IDBPDatabase<RentzDB>> {
               }
             }
             if (changed) await cursor.update(game as unknown as Game);
+            cursor = await cursor.continue();
+          }
+        }
+        if (oldVersion < 6) {
+          // v6: added Game.rentzRefusals.
+          const store = tx.objectStore('games');
+          let cursor = await store.openCursor();
+          while (cursor) {
+            const game = cursor.value as unknown as {
+              rentzRefusals?: unknown[];
+            };
+            if (!Array.isArray(game.rentzRefusals)) {
+              game.rentzRefusals = [];
+              await cursor.update(game as unknown as Game);
+            }
             cursor = await cursor.continue();
           }
         }

@@ -94,9 +94,13 @@ export default function ContractPickerScreen() {
                     contract: c,
                     blind: submitBlind,
                   });
-                  navigate(
-                    `/game/${active.id}/round/${c}${submitBlind ? '?blind=1' : ''}`,
-                  );
+                  if (c === 'rentz') {
+                    navigate(`/game/${active.id}/rentz-check`);
+                  } else {
+                    navigate(
+                      `/game/${active.id}/round/${c}${submitBlind ? '?blind=1' : ''}`,
+                    );
+                  }
                 }}
                 className={
                   'flex w-full items-center justify-between rounded-lg border px-4 py-4 text-left transition-colors ' +

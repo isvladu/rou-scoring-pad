@@ -65,6 +65,17 @@ export interface Round {
 
 export type GameStatus = 'in_progress' | 'finished';
 
+/**
+ * A single recorded Rentz refusal. The picker had selected Rentz; another
+ * player declined, the cards were shuffled, and the picker had to pick again.
+ * No `Round` is committed for a refused attempt — only this event.
+ */
+export interface RentzRefusal {
+  pickerId: PlayerId;
+  refuserId: PlayerId;
+  occurredAt: string;
+}
+
 export interface Game {
   id: string;
   createdAt: string;
@@ -72,6 +83,7 @@ export interface Game {
   players: Player[];
   scoring: ScoringConfig;
   rounds: Round[];
+  rentzRefusals: RentzRefusal[];
   status: GameStatus;
 }
 

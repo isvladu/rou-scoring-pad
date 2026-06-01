@@ -26,6 +26,12 @@ The app models a specific Romanian Rentz variant. Treat these as authoritative �
 
 Full rotation — each player **picks** each contract exactly once. Game length is `players × 8` rounds (32 / 40 / 48). The ContractPicker screen hides contracts the current picker has already chosen.
 
+**Rentz refusal** — when a picker selects Rentz, any other player may refuse the round. Routing goes ContractPicker → `/game/:id/rentz-check` (the dedicated `RentzCheckScreen`) → either RoundEntry (if everyone allows it) or back to ContractPicker (if someone refused). A refusal does NOT consume the picker's Rentz slot — Rentz stays in `legalContracts` because no `Round` was committed.
+
+- House rule: a player needs **3 suit edges** (aces + the lowest rank in the current deck — 7s for 4p, 5s for 5p, 3s for 6p) to refuse their first Rentz, then **4 suit edges** for every refusal after that, tracked per player and per game.
+- Stored as `Game.rentzRefusals: { pickerId, refuserId, occurredAt }[]`. Threshold logic lives in `src/domain/rentzRefusals.ts` (`rentzRefusalCount`, `rentzRefusalThreshold`).
+- Enforcement is **display only** — the app shows each player's current threshold but cannot see cards, so tapping Refuse always works. Players self-police at the table.
+
 **Blind ("pe nevăzute")** — the picker may declare *blind* before seeing their cards. Stored as `Round.blind: boolean`. When true, `computeRoundScores` multiplies every player's score for that round by `ScoringConfig.blindMultiplier` (default 2). Totals (Totale) is a straight sum of the four negative penalties — no separate multiplier — so a blind Totale is just `rawSum × blindMultiplier`.
 
 Two rules constrain when blind is allowed:
