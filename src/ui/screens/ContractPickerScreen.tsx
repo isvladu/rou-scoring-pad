@@ -1,15 +1,34 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useGameStore } from '../../state/gameStore';
 import { canBeBlind } from '../../domain/contracts';
+
+interface PickerLocationState {
+  refusedBy?: string;
+}
 
 export default function ContractPickerScreen() {
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { active, load, rotation } = useGameStore();
   const [blind, setBlind] = useState(false);
+
+  // Pick up a one-shot "X refused" banner from the navigation state and then
+  // clear the state so it doesn't reappear if the user navigates away and back.
+  const incomingState = (location.state ?? null) as PickerLocationState | null;
+  const [refusedBy, setRefusedBy] = useState<string | null>(
+    incomingState?.refusedBy ?? null,
+  );
+  useEffect(() => {
+    if (incomingState?.refusedBy) {
+      navigate(location.pathname, { replace: true, state: null });
+    }
+    // Only run on initial state arrival; subsequent renders see state === null.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (id && active?.id !== id) void load(id);
@@ -29,6 +48,19 @@ export default function ContractPickerScreen() {
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
+      {refusedBy && (
+        <div className="flex items-start justify-between gap-3 rounded-lg border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-sm text-rose-200">
+          <span>{t('rentzCheck.refusedBanner', { name: refusedBy })}</span>
+          <button
+            type="button"
+            onClick={() => setRefusedBy(null)}
+            aria-label={t('common.dismiss')}
+            className="text-rose-300/80 hover:text-rose-100"
+          >
+            ×
+          </button>
+        </div>
+      )}
       <div className="text-sm font-medium text-slate-200">
         {picker ? t('game.pickerIs', { name: picker.name }) : ''}
       </div>

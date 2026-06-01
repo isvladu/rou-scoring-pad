@@ -15,6 +15,7 @@
     "remove": "Elimină",
     "yes": "Da",
     "no": "Nu",
+    "dismiss": "Închide",
     "player": "Jucător",
     "players": "Jucători",
     "dealer": "Împărțitor",
@@ -112,11 +113,11 @@
   },
   "rentzCheck": {
     "intro": "{{name}} vrea să joace Rentz. Refuză cineva?",
-    "help": "Pentru a refuza, trebuie să declari că ai cel puțin numărul de vârfuri indicat (așii și cea mai mică valoare din acest pachet). Aplicația ține minte refuzurile; pragul crește după primul refuz.",
-    "statusLine": "A refuzat de {{count}} ori — are nevoie de {{threshold}} vârfuri pentru a refuza",
+    "help": "Pentru a refuza, trebuie să declari că ai cel puțin numărul de capete indicat (așii și cea mai mică valoare din acest pachet). Aplicația ține minte refuzurile; pragul crește după primul refuz.",
+    "statusLine": "A refuzat de {{count}} ori — are nevoie de {{threshold}} capete pentru a refuza",
     "refuse": "Refuză",
     "proceed": "Nimeni nu refuză — continuă",
-    "refusedAlert": "{{name}} a refuzat. Amestecă și alege din nou."
+    "refusedBanner": "{{name}} a refuzat Rentz. Amestecă și alege din nou."
   },
   "roundEntry": {
     "tricks": "Levate",

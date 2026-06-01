@@ -15,6 +15,7 @@
     "remove": "Remove",
     "yes": "Yes",
     "no": "No",
+    "dismiss": "Dismiss",
     "player": "Player",
     "players": "Players",
     "dealer": "Dealer",
@@ -116,7 +117,7 @@
     "statusLine": "Refused {{count}} time(s) — needs {{threshold}} suit edges to refuse",
     "refuse": "Refuse",
     "proceed": "Nobody refuses — proceed",
-    "refusedAlert": "{{name}} refused. Shuffle and pick again."
+    "refusedBanner": "{{name}} refused Rentz. Shuffle and pick again."
   },
   "roundEntry": {
     "tricks": "Tricks",

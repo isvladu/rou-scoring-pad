@@ -29,8 +29,10 @@ export default function RentzCheckScreen() {
 
   const handleRefuse = async (refuserId: string, refuserName: string): Promise<void> => {
     await recordRentzRefusal(refuserId);
-    window.alert(t('rentzCheck.refusedAlert', { name: refuserName }));
-    navigate(`/game/${active.id}/pick`, { replace: true });
+    navigate(`/game/${active.id}/pick`, {
+      replace: true,
+      state: { refusedBy: refuserName },
+    });
   };
 
   const handleProceed = (): void => {
