@@ -3,19 +3,23 @@
  * The user may want to correct these values to match their table's house rules —
  * the structure is the contract; the numbers are conventions.
  */
+/**
+ * All per-unit / per-taker values are stored as **non-negative magnitudes**.
+ * The scoring calculator applies the sign based on each contract's
+ * `CONTRACT_META[id].sign`. See `src/domain/contracts.ts` for the sign table.
+ */
 export const SCORING_DEFAULTS = {
-  noTricks: { perTrick: -2 },
-  noDiamonds: { perDiamond: -2 },
-  noQueens: { perQueen: -6 },
-  noKingOfHearts: { takingIt: -20 },
-  tenOfClubs: { takingIt: 10 },
-  totals: { multiplier: 1 },
-  whist: { perTrick: 2 },
+  noTricks: { perTrick: 50 },
+  noDiamonds: { perDiamond: 30 },
+  noQueens: { perQueen: 40 },
+  noKingOfHearts: { takingIt: 200 },
+  tenOfClubs: { takingIt: 200 },
+  whist: { perTrick: 50 },
   rentz: {
     byPosition: {
-      4: [30, 20, -10, -20],
-      5: [40, 20, 0, -20, -30],
-      6: [50, 30, 10, -10, -30, -40],
+      4: [300, 200, 100, 0],
+      5: [400, 300, 200, 100, 0],
+      6: [500, 400, 300, 200, 100, 0],
     },
   },
   /** Multiplier applied to the round's scores when the picker declared blind. */
@@ -28,7 +32,6 @@ export type ScoringConfig = {
   noQueens: { perQueen: number };
   noKingOfHearts: { takingIt: number };
   tenOfClubs: { takingIt: number };
-  totals: { multiplier: number };
   whist: { perTrick: number };
   rentz: { byPosition: Record<4 | 5 | 6, number[]> };
   blindMultiplier: number;

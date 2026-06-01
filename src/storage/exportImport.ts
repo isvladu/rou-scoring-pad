@@ -51,23 +51,39 @@ const RoundSchema = z.preprocess(
   }),
 );
 
+function absMag<T extends Record<string, unknown> | undefined>(
+  obj: T,
+  key: string,
+): void {
+  if (obj && typeof obj === 'object' && typeof obj[key] === 'number') {
+    (obj as Record<string, unknown>)[key] = Math.abs(obj[key] as number);
+  }
+}
+
 const ScoringSchema = z.preprocess(
   (val) => {
     if (!val || typeof val !== 'object') return val;
     const rec = val as Record<string, unknown>;
     // Pre-blind exports lacked `blindMultiplier`; default to 2.
     if (!('blindMultiplier' in rec)) {
-      return { ...rec, blindMultiplier: 2 };
+      rec.blindMultiplier = 2;
     }
+    // Old exports stored negative magnitudes for negative-sign contracts.
+    // Sign is now applied by the calculator, so we normalise on the way in.
+    absMag(rec.noTricks as Record<string, unknown> | undefined, 'perTrick');
+    absMag(rec.noDiamonds as Record<string, unknown> | undefined, 'perDiamond');
+    absMag(rec.noQueens as Record<string, unknown> | undefined, 'perQueen');
+    absMag(rec.noKingOfHearts as Record<string, unknown> | undefined, 'takingIt');
     return rec;
   },
+  // z.object strips unknown keys by default, so legacy exports carrying a
+  // `totals: { multiplier }` field parse cleanly with that field dropped.
   z.object({
     noTricks: z.object({ perTrick: z.number() }),
     noDiamonds: z.object({ perDiamond: z.number() }),
     noQueens: z.object({ perQueen: z.number() }),
     noKingOfHearts: z.object({ takingIt: z.number() }),
     tenOfClubs: z.object({ takingIt: z.number() }),
-    totals: z.object({ multiplier: z.number() }),
     whist: z.object({ perTrick: z.number() }),
     rentz: z.object({
       byPosition: z.object({

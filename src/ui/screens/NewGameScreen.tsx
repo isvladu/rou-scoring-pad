@@ -123,20 +123,31 @@ function ScoringRow({
   label,
   value,
   onValue,
+  negative,
 }: {
   label: string;
   value: number;
   onValue: (n: number) => void;
+  /** When true, the row visually shows a "−" prefix to hint the applied sign. */
+  negative?: boolean;
 }) {
   return (
     <div className="flex items-center justify-between gap-3 py-1">
       <span className="text-sm text-slate-300">{label}</span>
-      <input
-        type="number"
-        value={value}
-        onChange={(e) => onValue(toNum(e.target.value))}
-        className="w-24 rounded border border-slate-700 bg-slate-900 px-2 py-1 text-right tabular-nums text-slate-100"
-      />
+      <div className="flex items-center gap-1">
+        {negative && (
+          <span aria-hidden="true" className="text-base tabular-nums text-rose-400">
+            −
+          </span>
+        )}
+        <input
+          type="number"
+          min="0"
+          value={value}
+          onChange={(e) => onValue(Math.abs(toNum(e.target.value)))}
+          className="w-24 rounded border border-slate-700 bg-slate-900 px-2 py-1 text-right tabular-nums text-slate-100"
+        />
+      </div>
     </div>
   );
 }
@@ -159,31 +170,30 @@ function ScoringEditor({
         label={t('contracts.noTricks.label') + ' / ' + t('roundEntry.tricks')}
         value={scoring.noTricks.perTrick}
         onValue={(n) => onChange({ ...scoring, noTricks: { perTrick: n } })}
+        negative
       />
       <ScoringRow
         label={t('contracts.noDiamonds.label')}
         value={scoring.noDiamonds.perDiamond}
         onValue={(n) => onChange({ ...scoring, noDiamonds: { perDiamond: n } })}
+        negative
       />
       <ScoringRow
         label={t('contracts.noQueens.label')}
         value={scoring.noQueens.perQueen}
         onValue={(n) => onChange({ ...scoring, noQueens: { perQueen: n } })}
+        negative
       />
       <ScoringRow
         label={t('contracts.noKingOfHearts.label')}
         value={scoring.noKingOfHearts.takingIt}
         onValue={(n) => onChange({ ...scoring, noKingOfHearts: { takingIt: n } })}
+        negative
       />
       <ScoringRow
         label={t('contracts.tenOfClubs.label')}
         value={scoring.tenOfClubs.takingIt}
         onValue={(n) => onChange({ ...scoring, tenOfClubs: { takingIt: n } })}
-      />
-      <ScoringRow
-        label={t('contracts.totals.label') + ' ×'}
-        value={scoring.totals.multiplier}
-        onValue={(n) => onChange({ ...scoring, totals: { multiplier: n } })}
       />
       <ScoringRow
         label={t('contracts.whist.label')}
@@ -204,10 +214,11 @@ function ScoringEditor({
             <input
               key={idx}
               type="number"
+              min="0"
               value={v}
               onChange={(e) => {
                 const arr = [...scoring.rentz.byPosition[count]];
-                arr[idx] = toNum(e.target.value);
+                arr[idx] = Math.abs(toNum(e.target.value));
                 onChange({
                   ...scoring,
                   rentz: {

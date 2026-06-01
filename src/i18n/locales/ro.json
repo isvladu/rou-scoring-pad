@@ -62,6 +62,7 @@
     "blindToggle": "Pe nevăzute",
     "blindHelp": "Alege înainte de a te uita la cărți. Înmulțește scorul rundei cu ×{{m}}.",
     "blindUnavailable": "Pe nevăzute nu se poate juca la ultimul contract rămas.",
+    "blindNotAllowedForContract": "Nu se poate juca pe nevăzute.",
     "blindBadge": "PE NEVĂZUTE",
     "noContractsLeft": "{{name}} a ales toate contractele.",
     "lastRound": "Ultima rundă",

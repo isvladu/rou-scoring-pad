@@ -3,6 +3,7 @@ import type { Game, Player, RoundEntry } from '../domain/types';
 import { computeRotation, type RotationState } from '../domain/rotation';
 import { computeRoundScores, totalScores } from '../domain/scoring';
 import { validateRoundEntry } from '../domain/validation';
+import { canBeBlind } from '../domain/contracts';
 import { cloneDefaultScoring, type ScoringConfig } from '../config/scoringDefaults';
 import { saveGame, getGame } from '../storage/gamesRepo';
 
@@ -62,6 +63,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const rotation = computeRotation(game.players, game.rounds);
     if (!rotation.currentPickerId) throw new Error('Game already finished');
     const blind = options.blind === true;
+    if (blind && !canBeBlind(entry.contract)) {
+      throw new Error(`Contract "${entry.contract}" cannot be played blind`);
+    }
     const scores = computeRoundScores(entry, game.players, game.scoring, blind);
     const updated: Game = {
       ...game,

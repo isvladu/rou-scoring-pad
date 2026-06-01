@@ -128,7 +128,7 @@ describe('tenOfClubs scoring', () => {
 });
 
 describe('totals scoring', () => {
-  it('sums all negatives and multiplies by 2 (default)', () => {
+  it('sums all four negative penalties for the worst-case player', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
     const scores = computeRoundScores(
@@ -142,8 +142,8 @@ describe('totals scoring', () => {
       players,
       scoring,
     );
-    const expectedP1 = (-2 * 8 + -2 * 8 + -6 * 4 + -20) * 2;
-    expect(scores.p1).toBe(expectedP1);
+    const rawSum = -2 * 8 + -2 * 8 + -6 * 4 + -20;
+    expect(scores.p1).toBe(rawSum);
     expect(scores.p2).toBe(0);
     expect(scores.p3).toBe(0);
     expect(scores.p4).toBe(0);
@@ -164,7 +164,7 @@ describe('whist scoring', () => {
 });
 
 describe('rentz scoring', () => {
-  it('assigns position points in finishing order (4 players)', () => {
+  it('assigns position points in finishing order (4 players, last earns 0)', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
     const scores = computeRoundScores(
@@ -172,7 +172,20 @@ describe('rentz scoring', () => {
       players,
       scoring,
     );
-    expect(scores).toEqual({ p3: 30, p1: 20, p4: -10, p2: -20 });
+    expect(scores).toEqual({ p3: 30, p1: 20, p4: 10, p2: 0 });
+  });
+
+  it('never scores negative for any position with default config', () => {
+    const players = makePlayers(6);
+    const scoring = cloneDefaultScoring();
+    const scores = computeRoundScores(
+      { contract: 'rentz', finishingOrder: ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'] },
+      players,
+      scoring,
+    );
+    for (const v of Object.values(scores)) {
+      expect(v).toBeGreaterThanOrEqual(0);
+    }
   });
 
   it('rejects entries missing players', () => {
@@ -194,6 +207,28 @@ describe('rentz scoring', () => {
   });
 });
 
+describe('blind eligibility', () => {
+  it('rentz cannot be played blind', async () => {
+    const { canBeBlind } = await import('../src/domain/contracts');
+    expect(canBeBlind('rentz')).toBe(false);
+  });
+
+  it('every other contract can be played blind', async () => {
+    const { canBeBlind } = await import('../src/domain/contracts');
+    for (const c of [
+      'noTricks',
+      'noDiamonds',
+      'noQueens',
+      'noKingOfHearts',
+      'tenOfClubs',
+      'totals',
+      'whist',
+    ] as const) {
+      expect(canBeBlind(c)).toBe(true);
+    }
+  });
+});
+
 describe('blind multiplier', () => {
   it('multiplies every player\'s score by blindMultiplier when blind=true', () => {
     const players = makePlayers(4);
@@ -208,7 +243,7 @@ describe('blind multiplier', () => {
     expect(scores).toEqual({ p1: -12, p2: 0, p3: -20, p4: 0 });
   });
 
-  it('stacks with totals.multiplier (×2 × ×2 = ×4 by default)', () => {
+  it('applies blindMultiplier to a Totals round (no other multiplier in play)', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();
     const scores = computeRoundScores(
@@ -223,8 +258,8 @@ describe('blind multiplier', () => {
       scoring,
       true,
     );
-    const baseP1 = (-2 * 8 + -2 * 8 + -6 * 4 + -20) * 2; // totals.multiplier
-    expect(scores.p1).toBe(baseP1 * 2); // × blindMultiplier
+    const rawSum = -2 * 8 + -2 * 8 + -6 * 4 + -20;
+    expect(scores.p1).toBe(rawSum * scoring.blindMultiplier);
     expect(scores.p2).toBe(0);
   });
 

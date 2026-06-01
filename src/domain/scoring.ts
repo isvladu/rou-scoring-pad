@@ -1,4 +1,5 @@
 import type { ScoringConfig } from '../config/scoringDefaults';
+import { signed } from './contracts';
 import type { Player, PlayerCount, PlayerId, RoundEntry } from './types';
 
 function zeroScores(players: Player[]): Record<PlayerId, number> {
@@ -61,29 +62,54 @@ function computeBaseRoundScores(
 ): Record<PlayerId, number> {
   switch (entry.contract) {
     case 'noTricks':
-      return counterScores(players, entry.counts, scoring.noTricks.perTrick);
+      return counterScores(players, entry.counts, signed('noTricks', scoring.noTricks.perTrick));
     case 'noDiamonds':
-      return counterScores(players, entry.counts, scoring.noDiamonds.perDiamond);
+      return counterScores(
+        players,
+        entry.counts,
+        signed('noDiamonds', scoring.noDiamonds.perDiamond),
+      );
     case 'noQueens':
-      return counterScores(players, entry.counts, scoring.noQueens.perQueen);
+      return counterScores(players, entry.counts, signed('noQueens', scoring.noQueens.perQueen));
     case 'whist':
-      return counterScores(players, entry.counts, scoring.whist.perTrick);
+      return counterScores(players, entry.counts, signed('whist', scoring.whist.perTrick));
     case 'noKingOfHearts':
-      return takerScores(players, entry.takerId, scoring.noKingOfHearts.takingIt);
+      return takerScores(
+        players,
+        entry.takerId,
+        signed('noKingOfHearts', scoring.noKingOfHearts.takingIt),
+      );
     case 'tenOfClubs':
-      return takerScores(players, entry.takerId, scoring.tenOfClubs.takingIt);
+      return takerScores(
+        players,
+        entry.takerId,
+        signed('tenOfClubs', scoring.tenOfClubs.takingIt),
+      );
     case 'totals': {
-      const tricks = counterScores(players, entry.tricks, scoring.noTricks.perTrick);
-      const diamonds = counterScores(players, entry.diamonds, scoring.noDiamonds.perDiamond);
-      const queens = counterScores(players, entry.queens, scoring.noQueens.perQueen);
+      // Each sub-component gets signed per its own contract metadata, so a
+      // future "totals includes a positive contract" change wouldn't need
+      // hand-tuning here.
+      const tricks = counterScores(
+        players,
+        entry.tricks,
+        signed('noTricks', scoring.noTricks.perTrick),
+      );
+      const diamonds = counterScores(
+        players,
+        entry.diamonds,
+        signed('noDiamonds', scoring.noDiamonds.perDiamond),
+      );
+      const queens = counterScores(
+        players,
+        entry.queens,
+        signed('noQueens', scoring.noQueens.perQueen),
+      );
       const king = takerScores(
         players,
         entry.kingOfHeartsTakerId,
-        scoring.noKingOfHearts.takingIt,
+        signed('noKingOfHearts', scoring.noKingOfHearts.takingIt),
       );
-      const summed = sumRecords(tricks, diamonds, queens, king);
-      const m = scoring.totals.multiplier;
-      return Object.fromEntries(Object.entries(summed).map(([id, v]) => [id, v * m]));
+      return sumRecords(tricks, diamonds, queens, king);
     }
     case 'rentz': {
       const count = players.length as PlayerCount;

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGameStore } from '../../state/gameStore';
+import { canBeBlind } from '../../domain/contracts';
 
 export default function ContractPickerScreen() {
   const { t } = useTranslation();
@@ -76,31 +77,49 @@ export default function ContractPickerScreen() {
       </div>
 
       <ul className="space-y-2">
-        {rot.legalContracts.map((c) => (
-          <li key={c}>
-            <button
-              type="button"
-              onClick={() =>
-                navigate(
-                  `/game/${active.id}/round/${c}${blindActive ? '?blind=1' : ''}`,
-                )
-              }
-              className="flex w-full items-center justify-between rounded-lg border border-slate-800 bg-slate-900 px-4 py-4 text-left hover:border-brand-500"
-            >
-              <span className="flex items-baseline gap-2">
-                <span className="text-base font-medium text-slate-100">
-                  {t(`contracts.${c}.label`)}
-                </span>
-                {blindActive && (
-                  <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-400">
-                    {t('game.blindBadge')}
+        {rot.legalContracts.map((c) => {
+          const allowBlindForThis = canBeBlind(c);
+          const lockedByBlind = blindActive && !allowBlindForThis;
+          const submitBlind = blindActive && allowBlindForThis;
+          return (
+            <li key={c}>
+              <button
+                type="button"
+                disabled={lockedByBlind}
+                onClick={() =>
+                  navigate(
+                    `/game/${active.id}/round/${c}${submitBlind ? '?blind=1' : ''}`,
+                  )
+                }
+                className={
+                  'flex w-full items-center justify-between rounded-lg border px-4 py-4 text-left transition-colors ' +
+                  (lockedByBlind
+                    ? 'cursor-not-allowed border-slate-800 bg-slate-900/40 opacity-50'
+                    : 'border-slate-800 bg-slate-900 hover:border-brand-500')
+                }
+              >
+                <span className="flex flex-col gap-1">
+                  <span className="flex items-baseline gap-2">
+                    <span className="text-base font-medium text-slate-100">
+                      {t(`contracts.${c}.label`)}
+                    </span>
+                    {submitBlind && (
+                      <span className="rounded bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-400">
+                        {t('game.blindBadge')}
+                      </span>
+                    )}
                   </span>
-                )}
-              </span>
-              <span className="text-xs text-slate-400">{t(`contracts.${c}.kind`)}</span>
-            </button>
-          </li>
-        ))}
+                  {lockedByBlind && (
+                    <span className="text-[11px] text-amber-300/80">
+                      {t('game.blindNotAllowedForContract')}
+                    </span>
+                  )}
+                </span>
+                <span className="text-xs text-slate-400">{t(`contracts.${c}.kind`)}</span>
+              </button>
+            </li>
+          );
+        })}
       </ul>
       <button
         type="button"

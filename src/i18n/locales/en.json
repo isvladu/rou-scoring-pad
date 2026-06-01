@@ -62,6 +62,7 @@
     "blindToggle": "Blind",
     "blindHelp": "Decide before looking at the cards. Multiplies the round score by ×{{m}}.",
     "blindUnavailable": "Blind isn't allowed on your last remaining contract.",
+    "blindNotAllowedForContract": "Cannot be played blind.",
     "blindBadge": "BLIND",
     "noContractsLeft": "{{name}} has picked all contracts.",
     "lastRound": "Last round",
