@@ -1,7 +1,27 @@
 {
   "app": {
-    "title": "Rentz",
+    "title": "Pad de Scor",
     "tagline": "Caiet de scor offline"
+  },
+  "landing": {
+    "title": "Alege un joc",
+    "comingSoon": "În curând",
+    "rentz": {
+      "label": "Rentz",
+      "tagline": "Joc românesc de cărți cu levate"
+    },
+    "whist": {
+      "label": "Whist",
+      "tagline": "Whist Românesc"
+    },
+    "phase10": {
+      "label": "Phase 10",
+      "tagline": "Parcurge cele 10 faze"
+    },
+    "remi": {
+      "label": "Remi",
+      "tagline": "Remi românesc"
+    }
   },
   "common": {
     "save": "Salvează",

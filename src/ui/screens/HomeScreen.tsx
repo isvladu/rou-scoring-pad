@@ -1,126 +1,55 @@
-import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
-import { deleteGame, listGames } from '../../storage/gamesRepo';
-import { importGamesFromJson } from '../../storage/exportImport';
-import type { Game } from '../../domain/types';
-import { totalScores } from '../../domain/scoring';
+import { Link } from 'react-router-dom';
+
+type GameId = 'rentz' | 'whist' | 'phase10' | 'remi';
+
+const TILES: ReadonlyArray<{ id: GameId; to: string | null }> = [
+  { id: 'rentz', to: '/rentz' },
+  { id: 'whist', to: null },
+  { id: 'phase10', to: null },
+  { id: 'remi', to: null },
+];
 
 export default function HomeScreen() {
-  const { t, i18n } = useTranslation();
-  const [games, setGames] = useState<Game[]>([]);
-  const fileRef = useRef<HTMLInputElement | null>(null);
-  const navigate = useNavigate();
-
-  const refresh = (): void => {
-    void listGames().then(setGames);
-  };
-
-  useEffect(refresh, []);
-
-  const handleDelete = async (g: Game): Promise<void> => {
-    if (!window.confirm(t('home.deleteConfirm'))) return;
-    await deleteGame(g.id);
-    refresh();
-  };
-
-  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const text = await file.text();
-    try {
-      await importGamesFromJson(text);
-      refresh();
-    } catch (err) {
-      window.alert(String(err));
-    } finally {
-      e.target.value = '';
-    }
-  };
-
+  const { t } = useTranslation();
   return (
     <div className="mx-auto max-w-xl space-y-6">
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => navigate('/new')}
-          className="flex-1 rounded-lg bg-brand-500 px-4 py-3 text-lg font-medium text-slate-900 hover:bg-brand-600"
-        >
-          + {t('home.newGame')}
-        </button>
-        <button
-          type="button"
-          onClick={() => fileRef.current?.click()}
-          className="rounded-lg border border-slate-700 px-4 py-3 text-slate-200 hover:border-slate-500"
-        >
-          {t('home.importGame')}
-        </button>
-        <input
-          ref={fileRef}
-          type="file"
-          accept="application/json"
-          className="hidden"
-          onChange={handleImport}
-        />
-      </div>
-
-      {games.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-slate-700 px-4 py-6 text-center text-sm text-slate-400">
-          {t('home.noGames')}
-        </p>
-      ) : (
-        <ul className="space-y-2">
-          {games.map((g) => {
-            const totals = totalScores(g.players, g.rounds);
-            const leader = [...g.players].sort(
-              (a, b) => (totals[b.id] ?? 0) - (totals[a.id] ?? 0),
-            )[0];
+      <h1 className="text-xl font-semibold text-slate-100">{t('landing.title')}</h1>
+      <ul className="space-y-2">
+        {TILES.map((tile) => {
+          const label = t(`landing.${tile.id}.label`);
+          const tagline = t(`landing.${tile.id}.tagline`);
+          if (tile.to) {
             return (
-              <li
-                key={g.id}
-                className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900 px-3 py-2"
-              >
-                <Link to={`/game/${g.id}`} className="flex-1">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span className="font-medium text-slate-100">
-                      {g.players.map((p) => p.name).join(', ')}
-                    </span>
-                    <span
-                      className={
-                        'rounded-full px-2 py-0.5 text-[10px] uppercase ' +
-                        (g.status === 'finished'
-                          ? 'bg-slate-700 text-slate-300'
-                          : 'bg-emerald-700 text-emerald-100')
-                      }
-                    >
-                      {t(g.status === 'finished' ? 'home.finished' : 'home.inProgress')}
-                    </span>
-                  </div>
-                  <div className="text-xs text-slate-400">
-                    {t('home.createdAt')}:{' '}
-                    {new Date(g.createdAt).toLocaleString(i18n.resolvedLanguage)} ·{' '}
-                    {g.rounds.length} {t('common.rounds').toLowerCase()}
-                    {leader && (
-                      <>
-                        {' · '}
-                        {leader.name} {totals[leader.id] >= 0 ? '+' : ''}
-                        {totals[leader.id]}
-                      </>
-                    )}
-                  </div>
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => void handleDelete(g)}
-                  className="ml-3 text-xs uppercase text-slate-500 hover:text-rose-400"
+              <li key={tile.id}>
+                <Link
+                  to={tile.to}
+                  className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900 px-4 py-3 hover:border-brand-500"
                 >
-                  {t('common.delete')}
-                </button>
+                  <div>
+                    <div className="text-base font-medium text-slate-100">{label}</div>
+                    <div className="text-xs text-slate-400">{tagline}</div>
+                  </div>
+                  <span className="text-2xl leading-none text-slate-500">›</span>
+                </Link>
               </li>
             );
-          })}
-        </ul>
-      )}
+          }
+          return (
+            <li key={tile.id}>
+              <div className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/40 px-4 py-3 opacity-60">
+                <div>
+                  <div className="text-base font-medium text-slate-300">{label}</div>
+                  <div className="text-xs text-slate-500">{tagline}</div>
+                </div>
+                <span className="rounded-full bg-slate-700 px-2 py-0.5 text-[10px] uppercase tracking-wide text-slate-300">
+                  {t('landing.comingSoon')}
+                </span>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

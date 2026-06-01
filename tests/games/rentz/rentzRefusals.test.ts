@@ -4,9 +4,9 @@ import {
   SUBSEQUENT_REFUSAL_EDGES,
   rentzRefusalCount,
   rentzRefusalThreshold,
-} from '../src/domain/rentzRefusals';
-import { cloneDefaultScoring } from '../src/config/scoringDefaults';
-import type { Game, RentzRefusal } from '../src/domain/types';
+} from '../../../src/games/rentz/domain/rentzRefusals';
+import { cloneDefaultScoring } from '../../../src/games/rentz/config/scoringDefaults';
+import type { Game, RentzRefusal } from '../../../src/games/rentz/domain/types';
 
 function gameWith(refusals: RentzRefusal[]): Game {
   const now = new Date().toISOString();

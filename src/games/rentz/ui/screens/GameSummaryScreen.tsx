@@ -57,7 +57,7 @@ export default function GameSummaryScreen() {
         </button>
         <button
           type="button"
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/rentz')}
           className="flex-1 rounded-lg bg-brand-500 px-4 py-3 font-medium text-slate-900 hover:bg-brand-600"
         >
           {t('summary.backHome')}

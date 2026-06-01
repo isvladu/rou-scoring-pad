@@ -17,7 +17,7 @@ export default function GameScreen() {
   }, [id, active?.id, load]);
 
   if (!active || active.id !== id) return <p className="text-slate-400">…</p>;
-  if (active.status === 'finished') return <Navigate to={`/game/${active.id}/summary`} replace />;
+  if (active.status === 'finished') return <Navigate to={`/rentz/game/${active.id}/summary`} replace />;
 
   const rot = rotation();
   if (!rot) return null;
@@ -63,7 +63,7 @@ export default function GameScreen() {
       <div className="flex gap-2">
         <button
           type="button"
-          onClick={() => navigate(`/game/${active.id}/pick`)}
+          onClick={() => navigate(`/rentz/game/${active.id}/pick`)}
           className="flex-1 rounded-lg bg-brand-500 px-4 py-4 text-lg font-medium text-slate-900 hover:bg-brand-600"
         >
           {t('game.nextRound')}

@@ -47,7 +47,7 @@ export default function RoundEntryScreen() {
 
   if (!active || active.id !== id) return <p className="text-slate-400">…</p>;
   if (!contract || !(CONTRACT_IDS as string[]).includes(contract)) {
-    navigate(`/game/${active.id}/pick`, { replace: true });
+    navigate(`/rentz/game/${active.id}/pick`, { replace: true });
     return null;
   }
   const c = contract as ContractId;
@@ -75,7 +75,7 @@ export default function RoundEntryScreen() {
           expected={TRICKS_PER_HAND}
           label={t('roundEntry.tricks')}
           onSubmit={(counts) =>
-            commitRound({ contract: c, counts }, opts).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, counts }, opts).then(() => navigate(`/rentz/game/${active.id}`))
           }
         />
       ) : c === 'noDiamonds' ? (
@@ -84,7 +84,7 @@ export default function RoundEntryScreen() {
           expected={diamondsInDeck(count)}
           label={t('roundEntry.diamonds')}
           onSubmit={(counts) =>
-            commitRound({ contract: c, counts }, opts).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, counts }, opts).then(() => navigate(`/rentz/game/${active.id}`))
           }
         />
       ) : c === 'noQueens' ? (
@@ -93,7 +93,7 @@ export default function RoundEntryScreen() {
           expected={QUEENS_IN_DECK}
           label={t('roundEntry.queens')}
           onSubmit={(counts) =>
-            commitRound({ contract: c, counts }, opts).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, counts }, opts).then(() => navigate(`/rentz/game/${active.id}`))
           }
         />
       ) : c === 'noKingOfHearts' ? (
@@ -101,7 +101,7 @@ export default function RoundEntryScreen() {
           players={players}
           label={t('roundEntry.kingOfHearts')}
           onSubmit={(takerId) =>
-            commitRound({ contract: c, takerId }, opts).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, takerId }, opts).then(() => navigate(`/rentz/game/${active.id}`))
           }
         />
       ) : c === 'tenOfClubs' ? (
@@ -109,7 +109,7 @@ export default function RoundEntryScreen() {
           players={players}
           label={t('roundEntry.tenOfClubs')}
           onSubmit={(takerId) =>
-            commitRound({ contract: c, takerId }, opts).then(() => navigate(`/game/${active.id}`))
+            commitRound({ contract: c, takerId }, opts).then(() => navigate(`/rentz/game/${active.id}`))
           }
         />
       ) : c === 'totals' ? (
@@ -117,7 +117,7 @@ export default function RoundEntryScreen() {
           players={players}
           count={count}
           onSubmit={(entry) =>
-            commitRound(entry, opts).then(() => navigate(`/game/${active.id}`))
+            commitRound(entry, opts).then(() => navigate(`/rentz/game/${active.id}`))
           }
         />
       ) : (
@@ -126,7 +126,7 @@ export default function RoundEntryScreen() {
           blind={blind}
           onSubmit={(finishingOrder) =>
             commitRound({ contract: 'rentz', finishingOrder }, opts).then(() =>
-              navigate(`/game/${active.id}`),
+              navigate(`/rentz/game/${active.id}`),
             )
           }
         />
@@ -134,7 +134,7 @@ export default function RoundEntryScreen() {
 
       <button
         type="button"
-        onClick={() => navigate(`/game/${active.id}/pick`)}
+        onClick={() => navigate(`/rentz/game/${active.id}/pick`)}
         className="text-sm text-slate-400 underline"
       >
         ← {t('common.back')}

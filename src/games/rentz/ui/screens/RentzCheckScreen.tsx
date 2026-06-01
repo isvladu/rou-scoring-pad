@@ -20,7 +20,7 @@ export default function RentzCheckScreen() {
   if (!active || active.id !== id) return <p className="text-slate-400">…</p>;
   const rot = rotation();
   if (!rot || !rot.currentPickerId) {
-    navigate(`/game/${active.id}/summary`, { replace: true });
+    navigate(`/rentz/game/${active.id}/summary`, { replace: true });
     return null;
   }
   const picker = active.players.find((p) => p.id === rot.currentPickerId);
@@ -29,14 +29,14 @@ export default function RentzCheckScreen() {
 
   const handleRefuse = async (refuserId: string, refuserName: string): Promise<void> => {
     await recordRentzRefusal(refuserId);
-    navigate(`/game/${active.id}/pick`, {
+    navigate(`/rentz/game/${active.id}/pick`, {
       replace: true,
       state: { refusedBy: refuserName },
     });
   };
 
   const handleProceed = (): void => {
-    navigate(`/game/${active.id}/round/rentz`);
+    navigate(`/rentz/game/${active.id}/round/rentz`);
   };
 
   return (
@@ -94,7 +94,7 @@ export default function RentzCheckScreen() {
 
       <button
         type="button"
-        onClick={() => navigate(`/game/${active.id}/pick`)}
+        onClick={() => navigate(`/rentz/game/${active.id}/pick`)}
         className="text-sm text-slate-400 underline"
       >
         ← {t('common.back')}

@@ -40,7 +40,7 @@ export default function NewGameScreen() {
     }
     const playerList: Player[] = players.map((p) => ({ id: p.id, name: p.name.trim() }));
     const game = await startGame(playerList, scoring);
-    navigate(`/game/${game.id}`, { replace: true });
+    navigate(`/rentz/game/${game.id}`, { replace: true });
   };
 
   return (

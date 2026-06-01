@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { computeRotation, dealerForPicker } from '../src/domain/rotation';
-import { ALL_CONTRACTS, type Player, type Round } from '../src/domain/types';
+import { computeRotation, dealerForPicker } from '../../../src/games/rentz/domain/rotation';
+import { ALL_CONTRACTS, type Player, type Round } from '../../../src/games/rentz/domain/types';
 
 function makePlayers(n: 4 | 5 | 6): Player[] {
   return Array.from({ length: n }, (_, i) => ({ id: `p${i + 1}`, name: `P${i + 1}` }));

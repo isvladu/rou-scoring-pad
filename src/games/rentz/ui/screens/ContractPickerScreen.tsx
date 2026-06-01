@@ -37,7 +37,7 @@ export default function ContractPickerScreen() {
   if (!active || active.id !== id) return <p className="text-slate-400">…</p>;
   const rot = rotation();
   if (!rot || !rot.currentPickerId) {
-    navigate(`/game/${active.id}/summary`, { replace: true });
+    navigate(`/rentz/game/${active.id}/summary`, { replace: true });
     return null;
   }
   const picker = active.players.find((p) => p.id === rot.currentPickerId);
@@ -127,10 +127,10 @@ export default function ContractPickerScreen() {
                     blind: submitBlind,
                   });
                   if (c === 'rentz') {
-                    navigate(`/game/${active.id}/rentz-check`);
+                    navigate(`/rentz/game/${active.id}/rentz-check`);
                   } else {
                     navigate(
-                      `/game/${active.id}/round/${c}${submitBlind ? '?blind=1' : ''}`,
+                      `/rentz/game/${active.id}/round/${c}${submitBlind ? '?blind=1' : ''}`,
                     );
                   }
                 }}
@@ -166,7 +166,7 @@ export default function ContractPickerScreen() {
       </ul>
       <button
         type="button"
-        onClick={() => navigate(`/game/${active.id}`)}
+        onClick={() => navigate(`/rentz/game/${active.id}`)}
         className="text-sm text-slate-400 underline"
       >
         ← {t('common.back')}

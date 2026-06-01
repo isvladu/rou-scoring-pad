@@ -1,7 +1,27 @@
 {
   "app": {
-    "title": "Rentz",
+    "title": "Scoring Pad",
     "tagline": "Offline scoring pad"
+  },
+  "landing": {
+    "title": "Choose a game",
+    "comingSoon": "Coming soon",
+    "rentz": {
+      "label": "Rentz",
+      "tagline": "Romanian trick-taking card game"
+    },
+    "whist": {
+      "label": "Whist",
+      "tagline": "Romanian Whist (Whist Românesc)"
+    },
+    "phase10": {
+      "label": "Phase 10",
+      "tagline": "Race through 10 phases"
+    },
+    "remi": {
+      "label": "Remi",
+      "tagline": "Romanian Rummy"
+    }
   },
   "common": {
     "save": "Save",

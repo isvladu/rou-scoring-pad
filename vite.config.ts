@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/icon.svg', 'icons/icon-maskable.svg'],
       manifest: {
-        name: 'Rentz Scoring',
-        short_name: 'Rentz',
-        description: 'Offline scoring pad for the card game Rentz.',
+        name: 'Scoring Pad',
+        short_name: 'Scoring',
+        description: 'Offline scoring pad for tabletop card games.',
         theme_color: '#0f172a',
         background_color: '#0f172a',
         display: 'standalone',

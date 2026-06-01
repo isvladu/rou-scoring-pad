@@ -1,9 +1,9 @@
 import { describe, expect, it, beforeEach } from 'vitest';
-import { deleteGame, getGame, listGames, saveGame } from '../src/storage/gamesRepo';
-import { resetDbForTests } from '../src/storage/db';
-import { cloneDefaultScoring } from '../src/config/scoringDefaults';
-import type { Game } from '../src/domain/types';
-import { importGamesFromJson, serializeGames } from '../src/storage/exportImport';
+import { deleteGame, getGame, listGames, saveGame } from '../../../src/games/rentz/storage/gamesRepo';
+import { resetDbForTests } from '../../../src/games/rentz/storage/db';
+import { cloneDefaultScoring } from '../../../src/games/rentz/config/scoringDefaults';
+import type { Game } from '../../../src/games/rentz/domain/types';
+import { importGamesFromJson, serializeGames } from '../../../src/games/rentz/storage/exportImport';
 
 function sampleGame(id: string): Game {
   const now = new Date().toISOString();

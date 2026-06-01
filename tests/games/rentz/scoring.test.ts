@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { cloneDefaultScoring } from '../src/config/scoringDefaults';
-import { computeRoundScores, totalScores } from '../src/domain/scoring';
-import { signed } from '../src/domain/contracts';
-import { validateRoundEntry } from '../src/domain/validation';
-import type { Player } from '../src/domain/types';
+import { cloneDefaultScoring } from '../../../src/games/rentz/config/scoringDefaults';
+import { computeRoundScores, totalScores } from '../../../src/games/rentz/domain/scoring';
+import { signed } from '../../../src/games/rentz/domain/contracts';
+import { validateRoundEntry } from '../../../src/games/rentz/domain/validation';
+import type { Player } from '../../../src/games/rentz/domain/types';
 
 function makePlayers(n: 4 | 5 | 6): Player[] {
   return Array.from({ length: n }, (_, i) => ({ id: `p${i + 1}`, name: `P${i + 1}` }));
@@ -224,12 +224,12 @@ describe('rentz scoring', () => {
 
 describe('blind eligibility', () => {
   it('rentz cannot be played blind', async () => {
-    const { canBeBlind } = await import('../src/domain/contracts');
+    const { canBeBlind } = await import('../../../src/games/rentz/domain/contracts');
     expect(canBeBlind('rentz')).toBe(false);
   });
 
   it('every other contract can be played blind', async () => {
-    const { canBeBlind } = await import('../src/domain/contracts');
+    const { canBeBlind } = await import('../../../src/games/rentz/domain/contracts');
     for (const c of [
       'noTricks',
       'noDiamonds',
