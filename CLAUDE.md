@@ -9,7 +9,7 @@ The app models a specific Romanian Rentz variant. Treat these as authoritative �
 | Code id (English)  | EN label         | RO label                 | Type        | Notes                                                           |
 | ------------------ | ---------------- | ------------------------ | ----------- | --------------------------------------------------------------- |
 | `noTricks`         | No Tricks        | Levate                   | negative    | per trick taken (8 tricks/hand)                                 |
-| `noDiamonds`       | No Diamonds      | Carouri                  | negative    | per diamond taken; 8/10/12 diamonds for 4/5/6 players           |
+| `noDiamonds`       | No Diamonds      | Carouri                  | negative    | per diamond taken; 6/8/10/12 diamonds for 3/4/5/6 players       |
 | `noQueens`         | No Queens        | Dame                     | negative    | per queen taken; always 4 queens                                |
 | `noKingOfHearts`   | No King of Hearts | Regele de Inimă Roșie    | negative    | single taker gets the penalty                                   |
 | `tenOfClubs`       | 10 of Clubs      | 10 de Treflă             | **positive** | single taker gets the bonus                                     |
@@ -17,18 +17,18 @@ The app models a specific Romanian Rentz variant. Treat these as authoritative �
 | `whist`            | Whist            | Whist                    | per-trick   | **no bidding** — score is per trick taken                       |
 | `rentz`            | Rentz            | Rentz                    | ranking     | only finishing order is recorded; trick play is not modeled     |
 
-**Player counts**: 4, 5, or 6. Decks are 32 (4p, 7→A), 40 (5p, 5→A), 48 (6p, 3→A). Always 8 tricks per hand.
+**Player counts**: 3, 4, 5, or 6. Decks are 24 (3p, 9→A — 7s and 8s removed), 32 (4p, 7→A), 40 (5p, 5→A), 48 (6p, 3→A). Always 8 tricks per hand. The same 3-player support and deck shape also applies to **Whist Românesc** (3/4/5/6 players, 3p uses the 24-card deck).
 
 **Rotation rule** — two distinct roles per round:
 
 - **Picker** (`Round.pickerId`, `RotationState.currentPickerId`) — the player whose turn it is to choose the contract and lead play. The rotation index advances by picker; `picker = players[roundsPlayed % N]`.
 - **Dealer** (`RotationState.currentDealerId`, derived via `dealerForPicker`) — the player who deals the cards this round, always the seat **immediately before the picker** (wraps to the last seat for the first picker). Not stored on `Round` since it's pure-derivable from `pickerId` and the player order.
 
-Full rotation — each player **picks** each contract exactly once. Game length is `players × 8` rounds (32 / 40 / 48). The ContractPicker screen hides contracts the current picker has already chosen.
+Full rotation — each player **picks** each contract exactly once. Game length is `players × 8` rounds (24 / 32 / 40 / 48). The ContractPicker screen hides contracts the current picker has already chosen.
 
 **Rentz refusal** — when a picker selects Rentz, any other player may refuse the round. Routing goes ContractPicker → `/game/:id/rentz-check` (the dedicated `RentzCheckScreen`) → either RoundEntry (if everyone allows it) or back to ContractPicker (if someone refused). A refusal does NOT consume the picker's Rentz slot — Rentz stays in `legalContracts` because no `Round` was committed.
 
-- House rule: a player needs **3 suit edges** (aces + the lowest rank in the current deck — 7s for 4p, 5s for 5p, 3s for 6p) to refuse their first Rentz, then **4 suit edges** for every refusal after that, tracked per player and per game.
+- House rule: a player needs **3 suit edges** (aces + the lowest rank in the current deck — 9s for 3p, 7s for 4p, 5s for 5p, 3s for 6p) to refuse their first Rentz, then **4 suit edges** for every refusal after that, tracked per player and per game.
 - Stored as `Game.rentzRefusals: { pickerId, refuserId, occurredAt }[]`. Threshold logic lives in `src/domain/rentzRefusals.ts` (`rentzRefusalCount`, `rentzRefusalThreshold`).
 - Enforcement is **display only** — the app shows each player's current threshold but cannot see cards, so tapping Refuse always works. Players self-police at the table.
 

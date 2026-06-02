@@ -3,7 +3,7 @@ import type { Player, PlayerId } from '../../../core/types';
 
 export type { Player, PlayerId };
 
-export type PlayerCount = 4 | 5 | 6;
+export type PlayerCount = 3 | 4 | 5 | 6;
 
 export type ContractId =
   | 'noTricks'
@@ -85,9 +85,10 @@ export interface Game {
 }
 
 export const DECK_SIZE_BY_PLAYER_COUNT: Record<PlayerCount, number> = {
-  4: 32,
-  5: 40,
-  6: 48,
+  3: 24, // 9, 10, J, Q, K, A across 4 suits (7s and 8s removed)
+  4: 32, // 7 → A
+  5: 40, // 5 → A
+  6: 48, // 3 → A
 };
 
 export const TRICKS_PER_HAND = 8;

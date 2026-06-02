@@ -35,13 +35,18 @@ const ScoringSchema = z.object({
   zeroBidHitBonus: z.number(),
   maxBidHitBonus: z.number(),
   enforceDealerConstraint: z.boolean(),
+  // Defaults make games exported before the premiere house rule existed
+  // parse cleanly. Old games default to bonus=0 (rule effectively off),
+  // preserving their historical scores.
+  premiereStreakLength: z.number().default(5),
+  premiereBonus: z.number().default(0),
 });
 
 export const GameSchema = z.object({
   id: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  players: z.array(PlayerSchema).min(4).max(6),
+  players: z.array(PlayerSchema).min(3).max(6),
   schedule: z.array(z.number().int().min(1).max(8)),
   scoring: ScoringSchema,
   rounds: z.array(RoundSchema),

@@ -19,6 +19,8 @@
     "missPenaltyPerTrick": "Penalizare per levată ratată",
     "zeroBidHitBonus": "Bonus pentru licitație 0 ghicită",
     "maxBidHitBonus": "Bonus pentru licitația maximă ghicită",
+    "premiereStreakLength": "Lungime serie premieră (ghiciri consecutive, exclude mâinile de 1)",
+    "premiereBonus": "Bonus premieră (pe serie completă; 0 dezactivează)",
     "enforceDealerConstraint": "Aplică restricția împărțitorului",
     "enforceDealerConstraintHint": "Suma licitațiilor nu poate fi egală cu mâna.",
     "start": "Începe jocul",

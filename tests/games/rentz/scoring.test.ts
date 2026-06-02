@@ -5,7 +5,7 @@ import { signed } from '../../../src/games/rentz/domain/contracts';
 import { validateRoundEntry } from '../../../src/games/rentz/domain/validation';
 import type { Player } from '../../../src/games/rentz/domain/types';
 
-function makePlayers(n: 4 | 5 | 6): Player[] {
+function makePlayers(n: 3 | 4 | 5 | 6): Player[] {
   return Array.from({ length: n }, (_, i) => ({ id: `p${i + 1}`, name: `P${i + 1}` }));
 }
 
@@ -42,6 +42,24 @@ describe('noTricks scoring', () => {
 });
 
 describe('noDiamonds scoring', () => {
+  it('uses 6 diamonds for 3 players (7s and 8s removed)', () => {
+    const players = makePlayers(3);
+    const r = validateRoundEntry(
+      { contract: 'noDiamonds', counts: { p1: 2, p2: 2, p3: 2 } },
+      players,
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  it('rejects 3-player noDiamonds whose counts do not sum to 6', () => {
+    const players = makePlayers(3);
+    const r = validateRoundEntry(
+      { contract: 'noDiamonds', counts: { p1: 3, p2: 3, p3: 3 } },
+      players,
+    );
+    expect(r.ok).toBe(false);
+  });
+
   it('uses 8 diamonds for 4 players', () => {
     const players = makePlayers(4);
     const r = validateRoundEntry(
@@ -177,6 +195,18 @@ describe('whist scoring', () => {
 });
 
 describe('rentz scoring', () => {
+  it('uses byPosition[3] = [200, 100, 0] for 3 players', () => {
+    const players = makePlayers(3);
+    const scoring = cloneDefaultScoring();
+    expect(scoring.rentz.byPosition[3]).toEqual([200, 100, 0]);
+    const scores = computeRoundScores(
+      { contract: 'rentz', finishingOrder: ['p2', 'p1', 'p3'] },
+      players,
+      scoring,
+    );
+    expect(scores).toEqual({ p2: 200, p1: 100, p3: 0 });
+  });
+
   it('assigns position points in finishing order (last earns 0)', () => {
     const players = makePlayers(4);
     const scoring = cloneDefaultScoring();

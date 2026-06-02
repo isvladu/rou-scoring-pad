@@ -9,6 +9,15 @@ export interface WhistScoringConfig {
   maxBidHitBonus: number;
   /** Whether to enforce the rule "sum of bids must not equal handSize". */
   enforceDealerConstraint: boolean;
+  /** Length of a consecutive-hit streak that earns the premiere bonus.
+   *  Hand-size-1 rounds are excluded from the streak — they neither grow it
+   *  nor break it. Default 5. */
+  premiereStreakLength: number;
+  /** Magnitude of the premiere bonus, added to the player's score in the
+   *  round that completes a streak. The bonus fires again on every
+   *  subsequent multiple of `premiereStreakLength` while the streak
+   *  continues. 0 disables the rule. Default 10. */
+  premiereBonus: number;
 }
 
 export const DEFAULT_WHIST_SCORING: WhistScoringConfig = {
@@ -17,6 +26,8 @@ export const DEFAULT_WHIST_SCORING: WhistScoringConfig = {
   zeroBidHitBonus: 0,
   maxBidHitBonus: 0,
   enforceDealerConstraint: true,
+  premiereStreakLength: 5,
+  premiereBonus: 10,
 };
 
 export function cloneDefaultWhistScoring(): WhistScoringConfig {

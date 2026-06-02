@@ -87,6 +87,8 @@ const ScoringSchema = z.preprocess(
     whist: z.object({ perTrick: z.number() }),
     rentz: z.object({
       byPosition: z.object({
+        // Default fills in for games exported before 3-player support landed.
+        3: z.array(z.number()).default([200, 100, 0]),
         4: z.array(z.number()),
         5: z.array(z.number()),
         6: z.array(z.number()),
@@ -116,7 +118,7 @@ export const GameSchema = z.preprocess(
     id: z.string(),
     createdAt: z.string(),
     updatedAt: z.string(),
-    players: z.array(PlayerSchema).min(4).max(6),
+    players: z.array(PlayerSchema).min(3).max(6),
     scoring: ScoringSchema,
     rounds: z.array(RoundSchema),
     rentzRefusals: z.array(RentzRefusalSchema),

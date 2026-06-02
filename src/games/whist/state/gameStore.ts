@@ -6,7 +6,7 @@ import type {
   WhistRoundEntry,
 } from '../domain/types';
 import { generateSchedule, dealerForRound, pickerForRound } from '../domain/schedule';
-import { computeRoundScores, totalScores } from '../domain/scoring';
+import { computeRoundScores, priorStreaks, totalScores } from '../domain/scoring';
 import { validateRoundEntry } from '../domain/validation';
 import {
   cloneDefaultWhistScoring,
@@ -55,15 +55,15 @@ export const useWhistGameStore = create<WhistGameStore>((set, get) => ({
   async startGame(players, scoring) {
     const now = new Date().toISOString();
     const playerCount = players.length;
-    if (playerCount < 4 || playerCount > 6) {
-      throw new Error(`Whist supports 4-6 players (got ${playerCount}).`);
+    if (playerCount < 3 || playerCount > 6) {
+      throw new Error(`Whist supports 3-6 players (got ${playerCount}).`);
     }
     const game: WhistGame = {
       id: newId(),
       createdAt: now,
       updatedAt: now,
       players,
-      schedule: generateSchedule(playerCount as 4 | 5 | 6),
+      schedule: generateSchedule(playerCount as 3 | 4 | 5 | 6),
       scoring: scoring ?? cloneDefaultWhistScoring(),
       rounds: [],
       status: 'in_progress',
@@ -86,7 +86,15 @@ export const useWhistGameStore = create<WhistGameStore>((set, get) => ({
       throw new Error(`Invalid round entry: ${validation.errors.map((e) => e.code).join(', ')}`);
     }
     const picker = pickerForRound(roundIndex, game.players);
-    const scores = computeRoundScores(entry, handSize, game.players, game.scoring);
+    // priorStreak feeds the premiere bonus — derived from completed rounds.
+    const priorStreak = priorStreaks(game.players, game.rounds);
+    const scores = computeRoundScores(
+      entry,
+      handSize,
+      game.players,
+      game.scoring,
+      priorStreak,
+    );
     const updated: WhistGame = {
       ...game,
       rounds: [

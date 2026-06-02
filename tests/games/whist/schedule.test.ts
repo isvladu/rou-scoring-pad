@@ -15,6 +15,19 @@ const PLAYERS: Player[] = [
 ];
 
 describe('schedule', () => {
+  it('3-player schedule is 1×3, 2..7, 8×3, 7..2, 1×3 (21 rounds)', () => {
+    const schedule = generateSchedule(3);
+    expect(schedule).toEqual([
+      1, 1, 1,
+      2, 3, 4, 5, 6, 7,
+      8, 8, 8,
+      7, 6, 5, 4, 3, 2,
+      1, 1, 1,
+    ]);
+    expect(schedule).toHaveLength(21);
+    expect(totalRoundsFor(3)).toBe(21);
+  });
+
   it('4-player schedule is 1×4, 2..7, 8×4, 7..2, 1×4 (24 rounds)', () => {
     const schedule = generateSchedule(4);
     expect(schedule).toEqual([

@@ -19,6 +19,8 @@
     "missPenaltyPerTrick": "Miss penalty per trick",
     "zeroBidHitBonus": "Bonus for hitting bid of 0",
     "maxBidHitBonus": "Bonus for hitting max bid",
+    "premiereStreakLength": "Premiere streak length (consecutive hits, 1-card rounds excluded)",
+    "premiereBonus": "Premiere bonus (per completed streak; 0 disables)",
     "enforceDealerConstraint": "Enforce dealer constraint",
     "enforceDealerConstraintHint": "Sum of bids cannot equal the hand size.",
     "start": "Start game",

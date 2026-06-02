@@ -3,8 +3,8 @@ import type { WhistScoringConfig } from '../config/scoringDefaults';
 
 export type { Player, PlayerId };
 
-export type WhistPlayerCount = 4 | 5 | 6;
-export const ALL_WHIST_PLAYER_COUNTS: readonly WhistPlayerCount[] = [4, 5, 6] as const;
+export type WhistPlayerCount = 3 | 4 | 5 | 6;
+export const ALL_WHIST_PLAYER_COUNTS: readonly WhistPlayerCount[] = [3, 4, 5, 6] as const;
 
 export interface WhistRoundEntry {
   /** Per-player bid (0..handSize). */

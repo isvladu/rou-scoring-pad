@@ -131,6 +131,16 @@ export default function NewGameScreen() {
               value={scoring.maxBidHitBonus}
               onChange={(v) => updateScoring('maxBidHitBonus', v)}
             />
+            <NumberField
+              label={t('newGame.premiereStreakLength')}
+              value={scoring.premiereStreakLength}
+              onChange={(v) => updateScoring('premiereStreakLength', v)}
+            />
+            <NumberField
+              label={t('newGame.premiereBonus')}
+              value={scoring.premiereBonus}
+              onChange={(v) => updateScoring('premiereBonus', v)}
+            />
             <label className="flex items-start gap-3 text-sm text-slate-200">
               <input
                 type="checkbox"

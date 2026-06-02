@@ -5,7 +5,7 @@ import { cloneDefaultScoring, type ScoringConfig } from '../../config/scoringDef
 import type { Player, PlayerCount } from '../../domain/types';
 import { useGameStore } from '../../state/gameStore';
 
-const COUNTS: PlayerCount[] = [4, 5, 6];
+const COUNTS: PlayerCount[] = [3, 4, 5, 6];
 
 function makePlayerSlots(count: number): { id: string; name: string }[] {
   return Array.from({ length: count }, (_, i) => ({ id: `p${i + 1}`, name: '' }));

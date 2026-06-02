@@ -17,6 +17,7 @@ export const SCORING_DEFAULTS = {
   whist: { perTrick: 50 },
   rentz: {
     byPosition: {
+      3: [200, 100, 0],
       4: [300, 200, 100, 0],
       5: [400, 300, 200, 100, 0],
       6: [500, 400, 300, 200, 100, 0],
@@ -33,7 +34,7 @@ export type ScoringConfig = {
   noKingOfHearts: { takingIt: number };
   tenOfClubs: { takingIt: number };
   whist: { perTrick: number };
-  rentz: { byPosition: Record<4 | 5 | 6, number[]> };
+  rentz: { byPosition: Record<3 | 4 | 5 | 6, number[]> };
   blindMultiplier: number;
 };
 
