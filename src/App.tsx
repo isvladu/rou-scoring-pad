@@ -11,6 +11,7 @@ import HomeScreen from './ui/screens/HomeScreen';
 const RentzApp = lazy(() => import('./games/rentz'));
 const WhistApp = lazy(() => import('./games/whist'));
 const Phase10App = lazy(() => import('./games/phase10'));
+const RemiApp = lazy(() => import('./games/remi'));
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/rentz/*" element={<RentzApp />} />
               <Route path="/whist/*" element={<WhistApp />} />
               <Route path="/phase10/*" element={<Phase10App />} />
+              <Route path="/remi/*" element={<RemiApp />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>

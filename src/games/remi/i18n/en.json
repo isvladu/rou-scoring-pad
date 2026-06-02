@@ -1,0 +1,87 @@
+{
+  "home": {
+    "newGame": "New game",
+    "noGames": "No saved Remi games yet.",
+    "inProgress": "In progress",
+    "finished": "Finished",
+    "importGame": "Import",
+    "deleteConfirm": "Delete this game?",
+    "createdAt": "Created"
+  },
+  "newGame": {
+    "title": "New Remi game",
+    "playerCount": "Number of players",
+    "playerName": "Player {{n}} name",
+    "playerNamePlaceholder": "Player {{n}}",
+    "endCondition": "End condition",
+    "targetScore": "First to target score",
+    "handCount": "Fixed number of hands",
+    "targetScoreValue": "Target score",
+    "handCountValue": "Hand count",
+    "scoringOverrides": "Scoring (advanced)",
+    "scoringHint": "House-rule values can be edited per game.",
+    "winnerBonus": "Winner bonus",
+    "selfWinBonus": "Self-win bonus (all 14 at once)",
+    "jolyFirstMeldBonus": "Joly first-meld bonus",
+    "jolyRackPenalty": "Joly-on-rack penalty",
+    "identicalExposedBonus": "Identical-exposed declaration bonus",
+    "noMeldPenalty": "No-meld penalty (fixed mode)",
+    "noMeldPenaltyMode": "No-meld penalty mode",
+    "noMeldModeFixed": "Fixed −{{n}}",
+    "noMeldModeRackBased": "−100 − rack value",
+    "initialMeldThreshold": "Initial meld threshold (display only)",
+    "doubleScoreOnJolyDiscardWin": "Double winner score when final discard is a Joly",
+    "start": "Start game",
+    "nameRequired": "All player names are required."
+  },
+  "game": {
+    "nextHand": "Enter hand",
+    "undoHand": "Undo last hand",
+    "handsPlayed": "{{n}} hand(s) played",
+    "targetMode": "First to {{target}}",
+    "handCountMode": "Hand {{n}} of {{total}}"
+  },
+  "handEntry": {
+    "title": "Enter hand",
+    "winnerSection": "Winner",
+    "noWinner": "No winner (wall ran out)",
+    "selfWin": "Self-win (all 14 at once, no prior meld)",
+    "winnerDiscardedJoly": "Final discard was a Joly (×2 hand score)",
+    "perPlayerSection": "Per player",
+    "meldedValue": "Melded value",
+    "rackValue": "Rack value",
+    "melded": "Played tiles",
+    "jolyFirstMelded": "First to meld a Joly",
+    "jolyOnRack": "Joly left on rack",
+    "declaredIdenticalExposed": "Declared identical-exposed",
+    "preview": "Hand score: {{score}}",
+    "save": "Save hand",
+    "errors": {
+      "meldedValueNegative": "{{name}}'s melded value cannot be negative.",
+      "rackValueNegative": "{{name}}'s rack value cannot be negative.",
+      "meldedFalseWithValue": "{{name}} marked as not melded but has a melded value.",
+      "winnerDidNotMeld": "{{name}} is the winner — they must have melded.",
+      "winnerHasRackValue": "{{name}} is the winner — rack value must be 0 (got {{actual}}).",
+      "winnerHasJolyOnRack": "{{name}} is the winner — they cannot have a Joly on rack.",
+      "selfWinWithoutWinner": "Self-win requires a winner.",
+      "multipleFirstMelders": "At most one player can be the first Joly melder.",
+      "unknownWinner": "The chosen winner is not one of this game's players.",
+      "missingPerPlayerEntry": "Missing per-player row for {{name}}.",
+      "multipleIdenticalExposedDeclarants": "At most one player can declare the identical-exposed tile.",
+      "discardedJolyWithoutWinner": "Can't mark the winning discard as a Joly without a winner."
+    }
+  },
+  "history": {
+    "title": "History",
+    "empty": "No hands played yet.",
+    "handLine": "Hand {{n}}",
+    "wonBy": "won by {{name}}",
+    "noWinnerLine": "wall ran out (no winner)"
+  },
+  "summary": {
+    "title": "Final standings",
+    "winner": "Winner: {{name}}",
+    "exportJson": "Export JSON",
+    "backHome": "Back to Remi"
+  }
+}

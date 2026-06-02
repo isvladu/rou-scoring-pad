@@ -48,12 +48,13 @@ export type UnifiedEnvelopePayload = z.infer<typeof UnifiedEnvelope>;
  * registered by adding a line here — there is no runtime auto-discovery.
  */
 async function loadAdapters(): Promise<GameAdapter[]> {
-  const [rentz, whist, phase10] = await Promise.all([
+  const [rentz, whist, phase10, remi] = await Promise.all([
     import('../../games/rentz/storage/adapter'),
     import('../../games/whist/storage/adapter'),
     import('../../games/phase10/storage/adapter'),
+    import('../../games/remi/storage/adapter'),
   ]);
-  return [rentz.adapter, whist.adapter, phase10.adapter];
+  return [rentz.adapter, whist.adapter, phase10.adapter, remi.adapter];
 }
 
 /** Visible for tests so the same code path can be exercised with stub adapters. */

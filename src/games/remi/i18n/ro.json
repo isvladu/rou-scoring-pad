@@ -1,0 +1,87 @@
+{
+  "home": {
+    "newGame": "Joc nou",
+    "noGames": "Niciun joc de Remi salvat.",
+    "inProgress": "În desfășurare",
+    "finished": "Terminat",
+    "importGame": "Importă",
+    "deleteConfirm": "Ștergi acest joc?",
+    "createdAt": "Creat"
+  },
+  "newGame": {
+    "title": "Joc nou de Remi",
+    "playerCount": "Număr de jucători",
+    "playerName": "Numele jucătorului {{n}}",
+    "playerNamePlaceholder": "Jucător {{n}}",
+    "endCondition": "Condiție de încheiere",
+    "targetScore": "Primul la scor",
+    "handCount": "Număr fix de runde",
+    "targetScoreValue": "Scor țintă",
+    "handCountValue": "Număr de runde",
+    "scoringOverrides": "Punctaj (avansat)",
+    "scoringHint": "Regulile de casă pot fi editate per joc.",
+    "winnerBonus": "Bonus câștigător",
+    "selfWinBonus": "Bonus auto-câștig (toate 14 deodată)",
+    "jolyFirstMeldBonus": "Bonus primul care pune Joly în formație",
+    "jolyRackPenalty": "Penalizare Joly pe tablă",
+    "identicalExposedBonus": "Bonus atu",
+    "noMeldPenalty": "Penalizare fără formație (mod fix)",
+    "noMeldPenaltyMode": "Mod penalizare fără formație",
+    "noMeldModeFixed": "Fix −{{n}}",
+    "noMeldModeRackBased": "−100 − valoare tablă",
+    "initialMeldThreshold": "Prag primă formație (doar afișaj)",
+    "doubleScoreOnJolyDiscardWin": "Dublează scorul câștigătorului dacă ultima piesă aruncată este Joly",
+    "start": "Începe jocul",
+    "nameRequired": "Toate numele jucătorilor sunt obligatorii."
+  },
+  "game": {
+    "nextHand": "Înregistrează runda",
+    "undoHand": "Anulează ultima rundă",
+    "handsPlayed": "{{n}} rundă(e) jucate",
+    "targetMode": "Primul la {{target}}",
+    "handCountMode": "Runda {{n}} din {{total}}"
+  },
+  "handEntry": {
+    "title": "Înregistrează runda",
+    "winnerSection": "Câștigător",
+    "noWinner": "Fără câștigător (s-au terminat piesele)",
+    "selfWin": "Auto-câștig (toate 14 deodată, fără formație anterioară)",
+    "winnerDiscardedJoly": "Ultima piesă aruncată a fost Joly (×2 scor rundă)",
+    "perPlayerSection": "Per jucător",
+    "meldedValue": "Valoare formație",
+    "rackValue": "Valoare tablă",
+    "melded": "A făcut formație",
+    "jolyFirstMelded": "Primul care a pus Joly în formație",
+    "jolyOnRack": "Joly rămas pe tablă",
+    "declaredIdenticalExposed": "Are atu",
+    "preview": "Scor rundă: {{score}}",
+    "save": "Salvează runda",
+    "errors": {
+      "meldedValueNegative": "Valoarea formației lui {{name}} nu poate fi negativă.",
+      "rackValueNegative": "Valoarea tablei lui {{name}} nu poate fi negativă.",
+      "meldedFalseWithValue": "{{name}} marcat ca neavând formație dar are valoare formație.",
+      "winnerDidNotMeld": "{{name}} e câștigător — trebuie să fi făcut formație.",
+      "winnerHasRackValue": "{{name}} e câștigător — valoarea tablei trebuie să fie 0 (este {{actual}}).",
+      "winnerHasJolyOnRack": "{{name}} e câștigător — nu poate avea Joly pe tablă.",
+      "selfWinWithoutWinner": "Auto-câștigul cere un câștigător.",
+      "multipleFirstMelders": "Cel mult un jucător poate fi primul la Joly.",
+      "unknownWinner": "Câștigătorul ales nu este un jucător din acest joc.",
+      "missingPerPlayerEntry": "Lipsește rândul per-jucător pentru {{name}}.",
+      "multipleIdenticalExposedDeclarants": "Cel mult un jucător poate declara atu.",
+      "discardedJolyWithoutWinner": "Nu se poate marca ultima piesă aruncată ca Joly fără un câștigător."
+    }
+  },
+  "history": {
+    "title": "Istoric",
+    "empty": "Nicio rundă jucată încă.",
+    "handLine": "Runda {{n}}",
+    "wonBy": "câștigată de {{name}}",
+    "noWinnerLine": "s-au terminat piesele (fără câștigător)"
+  },
+  "summary": {
+    "title": "Clasament final",
+    "winner": "Câștigător: {{name}}",
+    "exportJson": "Exportă JSON",
+    "backHome": "Înapoi la Remi"
+  }
+}
