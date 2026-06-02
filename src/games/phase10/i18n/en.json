@@ -1,0 +1,62 @@
+{
+  "home": {
+    "newGame": "New game",
+    "noGames": "No saved Phase 10 games yet.",
+    "inProgress": "In progress",
+    "finished": "Finished",
+    "importGame": "Import",
+    "deleteConfirm": "Delete this game?",
+    "createdAt": "Created"
+  },
+  "newGame": {
+    "title": "New Phase 10 game",
+    "playerCount": "Number of players",
+    "playerName": "Player {{n}} name",
+    "playerNamePlaceholder": "Player {{n}}",
+    "scoringOverrides": "Scoring (advanced)",
+    "scoringHint": "Card-category penalties used for quick-add buttons.",
+    "penaltyLow": "Cards 1–9",
+    "penaltyHigh": "Cards 10–12",
+    "penaltySkip": "Skip card",
+    "penaltyWild": "Wild card",
+    "start": "Start game",
+    "nameRequired": "All player names are required."
+  },
+  "game": {
+    "nextHand": "Enter hand",
+    "undoHand": "Undo last hand",
+    "phase": "Phase {{n}}",
+    "phaseDone": "Phase 10 cleared",
+    "handsPlayed": "{{n}} hand(s) played"
+  },
+  "handEntry": {
+    "title": "Enter hand",
+    "wentOut": "Who closed the hand?",
+    "noWentOut": "Pick the player who closed the hand.",
+    "penaltyHeader": "Penalty (cards left in hand)",
+    "penaltyHint": "Categories: 1–9 = {{low}}, 10–12 = {{high}}, Skip = {{skip}}, Wild = {{wild}}.",
+    "quickAdd": "Quick-add",
+    "completedPhase": "Completed phase {{n}}",
+    "wentOutAuto": "(closed the hand — locked at 0)",
+    "wentOutPhaseAuto": "(auto: closing the hand completes the phase)",
+    "save": "Save hand",
+    "errors": {
+      "noWentOut": "Pick the player who closed the hand.",
+      "unknownWentOut": "Unknown player picked as the closer.",
+      "wentOutMustHaveZeroPenalty": "{{name}} closed the hand — their penalty must be 0 (got {{actual}}).",
+      "penaltyMustBeNonNegInt": "{{name}}'s penalty must be a non-negative whole number."
+    }
+  },
+  "history": {
+    "title": "History",
+    "empty": "No hands played yet.",
+    "handLine": "Hand {{n}} — closed by {{name}}",
+    "completedBadge": "phase ✓"
+  },
+  "summary": {
+    "title": "Final standings",
+    "winner": "Winner: {{name}}",
+    "exportJson": "Export JSON",
+    "backHome": "Back to Phase 10"
+  }
+}

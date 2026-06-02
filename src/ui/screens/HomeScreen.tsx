@@ -7,7 +7,7 @@ type GameId = 'rentz' | 'whist' | 'phase10' | 'remi';
 const TILES: ReadonlyArray<{ id: GameId; to: string | null }> = [
   { id: 'rentz', to: '/rentz' },
   { id: 'whist', to: '/whist' },
-  { id: 'phase10', to: null },
+  { id: 'phase10', to: '/phase10' },
   { id: 'remi', to: null },
 ];
 

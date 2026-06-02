@@ -1,0 +1,62 @@
+{
+  "home": {
+    "newGame": "Joc nou",
+    "noGames": "Niciun joc de Phase 10 salvat.",
+    "inProgress": "În desfășurare",
+    "finished": "Terminat",
+    "importGame": "Importă",
+    "deleteConfirm": "Ștergi acest joc?",
+    "createdAt": "Creat"
+  },
+  "newGame": {
+    "title": "Joc nou de Phase 10",
+    "playerCount": "Număr de jucători",
+    "playerName": "Numele jucătorului {{n}}",
+    "playerNamePlaceholder": "Jucător {{n}}",
+    "scoringOverrides": "Punctaj (avansat)",
+    "scoringHint": "Valorile penalităților pe categorii pentru butoanele rapide.",
+    "penaltyLow": "Cărți 1–9",
+    "penaltyHigh": "Cărți 10–12",
+    "penaltySkip": "Carte Skip",
+    "penaltyWild": "Carte Wild",
+    "start": "Începe jocul",
+    "nameRequired": "Toate numele jucătorilor sunt obligatorii."
+  },
+  "game": {
+    "nextHand": "Înregistrează runda",
+    "undoHand": "Anulează ultima rundă",
+    "phase": "Faza {{n}}",
+    "phaseDone": "Faza 10 finalizată",
+    "handsPlayed": "{{n}} rundă(e) jucate"
+  },
+  "handEntry": {
+    "title": "Înregistrează runda",
+    "wentOut": "Cine a închis runda?",
+    "noWentOut": "Alege jucătorul care a închis runda.",
+    "penaltyHeader": "Penalizare (cărți rămase în mână)",
+    "penaltyHint": "Categorii: 1–9 = {{low}}, 10–12 = {{high}}, Skip = {{skip}}, Wild = {{wild}}.",
+    "quickAdd": "Adaugă rapid",
+    "completedPhase": "A terminat faza {{n}}",
+    "wentOutAuto": "(a închis runda — penalizare 0)",
+    "wentOutPhaseAuto": "(automat: închiderea rundei finalizează faza)",
+    "save": "Salvează runda",
+    "errors": {
+      "noWentOut": "Alege jucătorul care a închis runda.",
+      "unknownWentOut": "Jucător necunoscut ales drept închizător.",
+      "wentOutMustHaveZeroPenalty": "{{name}} a închis runda — penalizarea trebuie să fie 0 (este {{actual}}).",
+      "penaltyMustBeNonNegInt": "Penalizarea lui {{name}} trebuie să fie un întreg nenegativ."
+    }
+  },
+  "history": {
+    "title": "Istoric",
+    "empty": "Nicio rundă jucată încă.",
+    "handLine": "Runda {{n}} — închisă de {{name}}",
+    "completedBadge": "fază ✓"
+  },
+  "summary": {
+    "title": "Clasament final",
+    "winner": "Câștigător: {{name}}",
+    "exportJson": "Exportă JSON",
+    "backHome": "Înapoi la Phase 10"
+  }
+}

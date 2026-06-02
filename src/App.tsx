@@ -10,6 +10,7 @@ import HomeScreen from './ui/screens/HomeScreen';
 // its i18n namespace JSON ride along, and none of it hits the initial bundle.
 const RentzApp = lazy(() => import('./games/rentz'));
 const WhistApp = lazy(() => import('./games/whist'));
+const Phase10App = lazy(() => import('./games/phase10'));
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/" element={<HomeScreen />} />
               <Route path="/rentz/*" element={<RentzApp />} />
               <Route path="/whist/*" element={<WhistApp />} />
+              <Route path="/phase10/*" element={<Phase10App />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
