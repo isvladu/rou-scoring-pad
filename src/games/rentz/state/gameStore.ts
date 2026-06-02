@@ -83,7 +83,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!game) throw new Error('No active game');
     const validation = validateRoundEntry(entry, game.players);
     if (!validation.ok) {
-      throw new Error(validation.errors.join(' '));
+      throw new Error(`Invalid round entry: ${validation.errors.map((e) => e.code).join(', ')}`);
     }
     const rotation = computeRotation(game.players, game.rounds);
     if (!rotation.currentPickerId) throw new Error('Game already finished');

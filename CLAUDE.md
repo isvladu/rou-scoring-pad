@@ -111,6 +111,16 @@ When adding a new contract or changing a scoring formula:
 5. Export the game → import on a fresh profile → totals identical.
 6. Throttle to offline (DevTools), reload — the app still loads and the game persists.
 
+## Conventional commits
+
+Every commit message should start with a type prefix:
+  - `feat:` - new functionality
+  - `fix:` - bug fix
+  - `refactor:` - restructuring without behaviour changes
+  - `chore:` - config, dependencies, CI
+  - `test:` - adding/fixing tests
+  - `docs:` - documentation only
+
 ## Memory
 
 This project has agent-specific memory under `~/.claude/projects/-Users-isvladu-Projects-rentz-scoring-app/memory/`. Two entries worth knowing about:

@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteGame, listGames } from '../../storage/gamesRepo';
-import { importGamesFromJson } from '../../storage/exportImport';
+import { importFromAnyFormat } from '../../../../core/storage/unifiedExportImport';
 import type { Game } from '../../domain/types';
 import { totalScores } from '../../domain/scoring';
 
 export default function RentzHomeScreen() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('rentz');
   const [games, setGames] = useState<Game[]>([]);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
@@ -29,7 +29,9 @@ export default function RentzHomeScreen() {
     if (!file) return;
     const text = await file.text();
     try {
-      await importGamesFromJson(text);
+      // Auto-detects scoring-pad, rentz-scoring-app, or whist-scoring-app —
+      // games for other types still get saved to their own stores.
+      await importFromAnyFormat(text);
       refresh();
     } catch (err) {
       window.alert(String(err));

@@ -9,7 +9,7 @@ interface PickerLocationState {
 }
 
 export default function ContractPickerScreen() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();

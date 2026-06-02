@@ -1,23 +1,10 @@
 import type { Game } from '../domain/types';
+import { createGamesRepo } from '../../../core/storage/createGamesRepo';
 import { getDb } from './db';
 
-export async function listGames(): Promise<Game[]> {
-  const db = await getDb();
-  const games = await db.getAllFromIndex('games', 'by-updatedAt');
-  return games.reverse();
-}
+const repo = createGamesRepo<Game>(getDb);
 
-export async function getGame(id: string): Promise<Game | undefined> {
-  const db = await getDb();
-  return db.get('games', id);
-}
-
-export async function saveGame(game: Game): Promise<void> {
-  const db = await getDb();
-  await db.put('games', { ...game, updatedAt: new Date().toISOString() });
-}
-
-export async function deleteGame(id: string): Promise<void> {
-  const db = await getDb();
-  await db.delete('games', id);
-}
+export const listGames = repo.list;
+export const getGame = repo.get;
+export const saveGame = repo.save;
+export const deleteGame = repo.remove;

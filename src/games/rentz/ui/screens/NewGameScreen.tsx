@@ -12,7 +12,7 @@ function makePlayerSlots(count: number): { id: string; name: string }[] {
 }
 
 export default function NewGameScreen() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const navigate = useNavigate();
   const startGame = useGameStore((s) => s.startGame);
 
@@ -161,7 +161,7 @@ function ScoringEditor({
   scoring: ScoringConfig;
   onChange(next: ScoringConfig): void;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
 
   return (
     <div className="mt-3 space-y-1 rounded-lg border border-slate-800 bg-slate-900/50 p-3">

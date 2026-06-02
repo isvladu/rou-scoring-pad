@@ -1,13 +1,8 @@
-import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
+import { openDB, type IDBPDatabase } from 'idb';
 import type { Game } from '../domain/types';
+import type { GamesSchema } from '../../../core/storage/createGamesRepo';
 
-interface RentzDB extends DBSchema {
-  games: {
-    key: string;
-    value: Game;
-    indexes: { 'by-updatedAt': string };
-  };
-}
+type RentzDB = GamesSchema<Game>;
 
 const DB_NAME = 'rentz';
 const DB_VERSION = 6;

@@ -102,7 +102,7 @@ const RentzRefusalSchema = z.object({
   occurredAt: z.string(),
 });
 
-const GameSchema = z.preprocess(
+export const GameSchema = z.preprocess(
   (val) => {
     if (!val || typeof val !== 'object') return val;
     const rec = val as Record<string, unknown>;
@@ -124,7 +124,7 @@ const GameSchema = z.preprocess(
   }),
 );
 
-const ExportSchema = z.object({
+export const ExportSchema = z.object({
   format: z.literal('rentz-scoring-app'),
   version: z.literal(1),
   exportedAt: z.string(),
@@ -149,16 +149,4 @@ export async function importGamesFromJson(json: string): Promise<number> {
     await saveGame(game as Game);
   }
   return parsed.games.length;
-}
-
-export function triggerDownload(filename: string, content: string): void {
-  const blob = new Blob([content], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
 }

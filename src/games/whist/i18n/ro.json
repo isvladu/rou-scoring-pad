@@ -1,0 +1,65 @@
+{
+  "home": {
+    "newGame": "Joc nou",
+    "noGames": "Niciun joc de Whist salvat.",
+    "inProgress": "În desfășurare",
+    "finished": "Terminat",
+    "importGame": "Importă",
+    "deleteConfirm": "Ștergi acest joc?",
+    "createdAt": "Creat"
+  },
+  "newGame": {
+    "title": "Joc nou de Whist",
+    "playerCount": "Număr de jucători",
+    "playerName": "Numele jucătorului {{n}}",
+    "playerNamePlaceholder": "Jucător {{n}}",
+    "scoringOverrides": "Punctaj (avansat)",
+    "scoringHint": "Valorile implicite pot fi editate pentru fiecare joc.",
+    "hitBonus": "Bonus pentru licitație ghicită",
+    "missPenaltyPerTrick": "Penalizare per levată ratată",
+    "zeroBidHitBonus": "Bonus pentru licitație 0 ghicită",
+    "maxBidHitBonus": "Bonus pentru licitația maximă ghicită",
+    "enforceDealerConstraint": "Aplică restricția împărțitorului",
+    "enforceDealerConstraintHint": "Suma licitațiilor nu poate fi egală cu mâna.",
+    "start": "Începe jocul",
+    "nameRequired": "Toate numele jucătorilor sunt obligatorii."
+  },
+  "game": {
+    "nextRound": "Înregistrează runda",
+    "endGame": "Încheie jocul",
+    "endGameConfirm": "Închei jocul acum?",
+    "roundOf": "Runda {{n}} din {{total}}",
+    "handSize": "Mână: {{n}}",
+    "pickerIs": "{{name}} începe",
+    "dealerIs": "{{name}} împarte",
+    "leadsLabel": "începe",
+    "undoRound": "Anulează ultima rundă"
+  },
+  "roundEntry": {
+    "bids": "Licitații",
+    "tricks": "Levate",
+    "tricksHint": "Suma trebuie să fie egală cu mâna.",
+    "bidSumWarning": "Suma licitațiilor nu poate fi {{n}} — restricția împărțitorului.",
+    "bidSumOK": "Suma licitațiilor: {{n}}",
+    "save": "Salvează runda",
+    "errors": {
+      "bidOutOfRange": "Licitația lui {{name}} trebuie să fie între 0 și {{max}}.",
+      "tricksOutOfRange": "Levatele lui {{name}} trebuie să fie între 0 și {{max}}.",
+      "tricksSumMismatch": "Total levate trebuie să fie {{expected}} (este {{actual}}).",
+      "dealerConstraint": "Suma licitațiilor nu poate fi {{handSize}} — restricția împărțitorului."
+    }
+  },
+  "history": {
+    "title": "Istoric",
+    "empty": "Nicio rundă jucată încă.",
+    "handLine": "R{{n}} · mână {{handSize}}",
+    "bidLabel": "licit.",
+    "tricksLabel": "levate"
+  },
+  "summary": {
+    "title": "Clasament final",
+    "winner": "Câștigător: {{name}}",
+    "exportJson": "Exportă JSON",
+    "backHome": "Înapoi la Whist"
+  }
+}

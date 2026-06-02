@@ -1,0 +1,65 @@
+{
+  "home": {
+    "newGame": "New game",
+    "noGames": "No saved Whist games yet.",
+    "inProgress": "In progress",
+    "finished": "Finished",
+    "importGame": "Import",
+    "deleteConfirm": "Delete this game?",
+    "createdAt": "Created"
+  },
+  "newGame": {
+    "title": "New Whist game",
+    "playerCount": "Number of players",
+    "playerName": "Player {{n}} name",
+    "playerNamePlaceholder": "Player {{n}}",
+    "scoringOverrides": "Scoring (advanced)",
+    "scoringHint": "Default values can be edited per game.",
+    "hitBonus": "Hit-bid bonus",
+    "missPenaltyPerTrick": "Miss penalty per trick",
+    "zeroBidHitBonus": "Bonus for hitting bid of 0",
+    "maxBidHitBonus": "Bonus for hitting max bid",
+    "enforceDealerConstraint": "Enforce dealer constraint",
+    "enforceDealerConstraintHint": "Sum of bids cannot equal the hand size.",
+    "start": "Start game",
+    "nameRequired": "All player names are required."
+  },
+  "game": {
+    "nextRound": "Enter round",
+    "endGame": "End game",
+    "endGameConfirm": "End the game now?",
+    "roundOf": "Round {{n}} of {{total}}",
+    "handSize": "Hand size: {{n}}",
+    "pickerIs": "{{name}} leads",
+    "dealerIs": "{{name}} deals",
+    "leadsLabel": "leads",
+    "undoRound": "Undo last round"
+  },
+  "roundEntry": {
+    "bids": "Bids",
+    "tricks": "Tricks",
+    "tricksHint": "Sum must equal the hand size.",
+    "bidSumWarning": "Total bids cannot equal {{n}} — dealer constraint.",
+    "bidSumOK": "Total bids: {{n}}",
+    "save": "Save round",
+    "errors": {
+      "bidOutOfRange": "Bid for {{name}} must be between 0 and {{max}}.",
+      "tricksOutOfRange": "Tricks for {{name}} must be between 0 and {{max}}.",
+      "tricksSumMismatch": "Total tricks must equal {{expected}} (got {{actual}}).",
+      "dealerConstraint": "Total bids cannot equal {{handSize}} — dealer constraint."
+    }
+  },
+  "history": {
+    "title": "History",
+    "empty": "No rounds played yet.",
+    "handLine": "R{{n}} · hand {{handSize}}",
+    "bidLabel": "bid",
+    "tricksLabel": "took"
+  },
+  "summary": {
+    "title": "Final standings",
+    "winner": "Winner: {{name}}",
+    "exportJson": "Export JSON",
+    "backHome": "Back to Whist"
+  }
+}

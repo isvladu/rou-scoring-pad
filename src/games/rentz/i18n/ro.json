@@ -1,54 +1,4 @@
 {
-  "app": {
-    "title": "Pad de Scor",
-    "tagline": "Caiet de scor offline"
-  },
-  "landing": {
-    "title": "Alege un joc",
-    "comingSoon": "În curând",
-    "rentz": {
-      "label": "Rentz",
-      "tagline": "Joc românesc de cărți cu levate"
-    },
-    "whist": {
-      "label": "Whist",
-      "tagline": "Whist Românesc"
-    },
-    "phase10": {
-      "label": "Phase 10",
-      "tagline": "Parcurge cele 10 faze"
-    },
-    "remi": {
-      "label": "Remi",
-      "tagline": "Remi românesc"
-    }
-  },
-  "common": {
-    "save": "Salvează",
-    "cancel": "Anulează",
-    "back": "Înapoi",
-    "next": "Următorul",
-    "finish": "Termină",
-    "delete": "Șterge",
-    "confirm": "Confirmă",
-    "edit": "Editează",
-    "remove": "Elimină",
-    "yes": "Da",
-    "no": "Nu",
-    "dismiss": "Închide",
-    "player": "Jucător",
-    "players": "Jucători",
-    "dealer": "Împărțitor",
-    "round": "Runda",
-    "rounds": "Runde",
-    "total": "Total",
-    "points": "puncte",
-    "language": "Limbă",
-    "english": "Engleză",
-    "romanian": "Română",
-    "updateAvailable": "Actualizare disponibilă",
-    "reload": "Reîncarcă"
-  },
   "home": {
     "newGame": "Joc nou",
     "noGames": "Niciun joc salvat.",
@@ -161,7 +111,26 @@
     "tabTricks": "Levate",
     "tabDiamonds": "Caro",
     "tabQueens": "Dame",
-    "tabKing": "K♥"
+    "tabKing": "K♥",
+    "errors": {
+      "countsMustBeNonNeg": {
+        "tricks": "Levatele trebuie să fie numere întregi nenegative.",
+        "diamonds": "Carourile trebuie să fie numere întregi nenegative.",
+        "queens": "Damele trebuie să fie numere întregi nenegative."
+      },
+      "countSumMismatch": {
+        "tricks": "Total levate trebuie să fie {{expected}} (este {{actual}}).",
+        "diamonds": "Total caro trebuie să fie {{expected}} (este {{actual}}).",
+        "queens": "Total dame trebuie să fie {{expected}} (este {{actual}})."
+      },
+      "pickTaker": {
+        "kingOfHearts": "Alege un jucător care a luat K♥.",
+        "tenOfClubs": "Alege un jucător care a luat 10♣."
+      },
+      "rentzRankAll": "Clasează toți cei {{expected}} jucători.",
+      "rentzDuplicate": "Fiecare jucător poate apărea o singură dată.",
+      "rentzUnknownPlayer": "Jucător necunoscut în ordinea de terminare."
+    }
   },
   "summary": {
     "title": "Clasament final",

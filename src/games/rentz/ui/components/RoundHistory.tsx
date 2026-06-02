@@ -25,7 +25,7 @@ function buildTimeline(game: Game): TimelineItem[] {
 }
 
 export default function RoundHistory({ game }: Props) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const timeline = useMemo(() => buildTimeline(game), [game]);
 
   const nameOf = (id: PlayerId): string =>
@@ -80,7 +80,7 @@ function RoundCard({
   pickerName: string;
   blindBadge: string;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   return (
     <li className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2">
       <div className="mb-1 flex items-baseline justify-between gap-2">

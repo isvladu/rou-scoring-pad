@@ -14,9 +14,9 @@ import {
   QUEENS_IN_DECK,
   TRICKS_PER_HAND,
 } from '../../domain/types';
-import PlayerStepper from '../components/PlayerStepper';
-import PlayerSinglePick from '../components/PlayerSinglePick';
-import PlayerRanker from '../components/PlayerRanker';
+import PlayerStepper from '../../../../core/components/PlayerStepper';
+import PlayerSinglePick from '../../../../core/components/PlayerSinglePick';
+import PlayerRanker from '../../../../core/components/PlayerRanker';
 
 const CONTRACT_IDS: ContractId[] = [
   'noTricks',
@@ -34,7 +34,7 @@ function emptyCounts(players: Player[]): Record<PlayerId, number> {
 }
 
 export default function RoundEntryScreen() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const { id, contract } = useParams();
   const [search] = useSearchParams();
   const navigate = useNavigate();
@@ -154,7 +154,7 @@ function CounterEntry({
   label: string;
   onSubmit(counts: Record<PlayerId, number>): Promise<unknown>;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const [counts, setCounts] = useState<Record<PlayerId, number>>(() => emptyCounts(players));
   const sum = players.reduce((acc, p) => acc + (counts[p.id] ?? 0), 0);
   const valid = sum === expected;
@@ -188,7 +188,7 @@ function SingleTakerEntry({
   label: string;
   onSubmit(takerId: PlayerId): Promise<unknown>;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const [taker, setTaker] = useState<PlayerId | null>(null);
   return (
     <div className="space-y-4">
@@ -214,7 +214,7 @@ function TotalsEntry({
   count: PlayerCount;
   onSubmit(entry: RoundEntry): Promise<unknown>;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const [tab, setTab] = useState<'tricks' | 'diamonds' | 'queens' | 'king'>('tricks');
   const [tricks, setTricks] = useState(() => emptyCounts(players));
   const [diamonds, setDiamonds] = useState(() => emptyCounts(players));
@@ -312,7 +312,7 @@ function RentzEntry({
   blind: boolean;
   onSubmit(order: PlayerId[]): Promise<unknown>;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const { active } = useGameStore();
   const [order, setOrder] = useState<PlayerId[]>([]);
   const complete = order.length === players.length;

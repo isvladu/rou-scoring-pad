@@ -1,54 +1,4 @@
 {
-  "app": {
-    "title": "Scoring Pad",
-    "tagline": "Offline scoring pad"
-  },
-  "landing": {
-    "title": "Choose a game",
-    "comingSoon": "Coming soon",
-    "rentz": {
-      "label": "Rentz",
-      "tagline": "Romanian trick-taking card game"
-    },
-    "whist": {
-      "label": "Whist",
-      "tagline": "Romanian Whist (Whist Românesc)"
-    },
-    "phase10": {
-      "label": "Phase 10",
-      "tagline": "Race through 10 phases"
-    },
-    "remi": {
-      "label": "Remi",
-      "tagline": "Romanian Rummy"
-    }
-  },
-  "common": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "back": "Back",
-    "next": "Next",
-    "finish": "Finish",
-    "delete": "Delete",
-    "confirm": "Confirm",
-    "edit": "Edit",
-    "remove": "Remove",
-    "yes": "Yes",
-    "no": "No",
-    "dismiss": "Dismiss",
-    "player": "Player",
-    "players": "Players",
-    "dealer": "Dealer",
-    "round": "Round",
-    "rounds": "Rounds",
-    "total": "Total",
-    "points": "points",
-    "language": "Language",
-    "english": "English",
-    "romanian": "Romanian",
-    "updateAvailable": "Update available",
-    "reload": "Reload"
-  },
   "home": {
     "newGame": "New game",
     "noGames": "No saved games yet.",
@@ -161,7 +111,26 @@
     "tabTricks": "Tricks",
     "tabDiamonds": "Diamonds",
     "tabQueens": "Queens",
-    "tabKing": "K♥"
+    "tabKing": "K♥",
+    "errors": {
+      "countsMustBeNonNeg": {
+        "tricks": "Trick counts must be non-negative integers.",
+        "diamonds": "Diamond counts must be non-negative integers.",
+        "queens": "Queen counts must be non-negative integers."
+      },
+      "countSumMismatch": {
+        "tricks": "Trick counts must sum to {{expected}} (got {{actual}}).",
+        "diamonds": "Diamond counts must sum to {{expected}} (got {{actual}}).",
+        "queens": "Queen counts must sum to {{expected}} (got {{actual}})."
+      },
+      "pickTaker": {
+        "kingOfHearts": "Pick one player as the K♥ taker.",
+        "tenOfClubs": "Pick one player as the 10♣ taker."
+      },
+      "rentzRankAll": "Rank all {{expected}} players.",
+      "rentzDuplicate": "Each player can appear only once.",
+      "rentzUnknownPlayer": "Unknown player in finishing order."
+    }
   },
   "summary": {
     "title": "Final standings",

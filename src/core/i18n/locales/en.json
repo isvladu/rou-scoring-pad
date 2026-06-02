@@ -1,0 +1,58 @@
+{
+  "app": {
+    "title": "Scoring Pad",
+    "tagline": "Offline scoring pad"
+  },
+  "landing": {
+    "title": "Choose a game",
+    "comingSoon": "Coming soon",
+    "rentz": {
+      "label": "Rentz",
+      "tagline": "Romanian trick-taking card game"
+    },
+    "whist": {
+      "label": "Whist",
+      "tagline": "Romanian Whist (Whist Românesc)"
+    },
+    "phase10": {
+      "label": "Phase 10",
+      "tagline": "Race through 10 phases"
+    },
+    "remi": {
+      "label": "Remi",
+      "tagline": "Romanian Rummy"
+    },
+    "backup": {
+      "title": "Backup",
+      "exportAll": "Export all (JSON)",
+      "import": "Import (JSON)",
+      "importSuccess": "Imported {{total}} game(s)."
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "edit": "Edit",
+    "remove": "Remove",
+    "yes": "Yes",
+    "no": "No",
+    "dismiss": "Dismiss",
+    "player": "Player",
+    "players": "Players",
+    "dealer": "Dealer",
+    "round": "Round",
+    "rounds": "Rounds",
+    "total": "Total",
+    "points": "points",
+    "language": "Language",
+    "english": "English",
+    "romanian": "Romanian",
+    "updateAvailable": "Update available",
+    "reload": "Reload"
+  }
+}

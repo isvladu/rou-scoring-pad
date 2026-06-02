@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGameStore } from '../../state/gameStore';
 import { totalScores } from '../../domain/scoring';
-import { serializeGames, triggerDownload } from '../../storage/exportImport';
-import Scoreboard from '../components/Scoreboard';
+import { serializeGames } from '../../storage/exportImport';
+import { triggerDownload } from '../../../../core/storage/triggerDownload';
+import Scoreboard from '../../../../core/components/Scoreboard';
 import RoundHistory from '../components/RoundHistory';
 
 export default function GameSummaryScreen() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const { id } = useParams();
   const navigate = useNavigate();
   const { active, load, finish } = useGameStore();
@@ -18,8 +19,11 @@ export default function GameSummaryScreen() {
   }, [id, active?.id, load]);
 
   useEffect(() => {
-    if (active && active.status !== 'finished') void finish();
-  }, [active, finish]);
+    // Guard against the stale-active race: the load effect above may still
+    // be fetching the URL game; until `active.id === id`, the store could
+    // be holding a previously-opened game we must NOT mark finished.
+    if (active && active.id === id && active.status !== 'finished') void finish();
+  }, [active, id, finish]);
 
   if (!active || active.id !== id) return <p className="text-slate-400">…</p>;
   const totals = totalScores(active.players, active.rounds);
@@ -33,7 +37,7 @@ export default function GameSummaryScreen() {
           🏆 {t('summary.winner', { name: winner.name })}
         </div>
       )}
-      <Scoreboard game={active} />
+      <Scoreboard players={active.players} totals={totals} />
       {(active.rounds.length > 0 || active.rentzRefusals.length > 0) && (
         <section className="space-y-3">
           <h3 className="text-sm uppercase tracking-wide text-slate-400">

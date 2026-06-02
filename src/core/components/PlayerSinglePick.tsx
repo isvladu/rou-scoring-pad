@@ -1,4 +1,4 @@
-import type { Player, PlayerId } from '../../domain/types';
+import type { Player, PlayerId } from '../types';
 
 interface Props {
   players: Player[];

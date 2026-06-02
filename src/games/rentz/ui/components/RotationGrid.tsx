@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function RotationGrid({ players, rounds, rotation }: Props) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const playedMap = new Map<string, { blind: boolean }>();
   for (const r of rounds) {
     playedMap.set(`${r.pickerId}:${r.entry.contract}`, { blind: r.blind });

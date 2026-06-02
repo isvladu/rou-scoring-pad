@@ -1,0 +1,58 @@
+{
+  "app": {
+    "title": "Pad de Scor",
+    "tagline": "Caiet de scor offline"
+  },
+  "landing": {
+    "title": "Alege un joc",
+    "comingSoon": "În curând",
+    "rentz": {
+      "label": "Rentz",
+      "tagline": "Joc românesc de cărți cu levate"
+    },
+    "whist": {
+      "label": "Whist",
+      "tagline": "Whist Românesc"
+    },
+    "phase10": {
+      "label": "Phase 10",
+      "tagline": "Parcurge cele 10 faze"
+    },
+    "remi": {
+      "label": "Remi",
+      "tagline": "Remi românesc"
+    },
+    "backup": {
+      "title": "Salvare",
+      "exportAll": "Exportă tot (JSON)",
+      "import": "Importă (JSON)",
+      "importSuccess": "S-au importat {{total}} joc(uri)."
+    }
+  },
+  "common": {
+    "save": "Salvează",
+    "cancel": "Anulează",
+    "back": "Înapoi",
+    "next": "Următorul",
+    "finish": "Termină",
+    "delete": "Șterge",
+    "confirm": "Confirmă",
+    "edit": "Editează",
+    "remove": "Elimină",
+    "yes": "Da",
+    "no": "Nu",
+    "dismiss": "Închide",
+    "player": "Jucător",
+    "players": "Jucători",
+    "dealer": "Împărțitor",
+    "round": "Runda",
+    "rounds": "Runde",
+    "total": "Total",
+    "points": "puncte",
+    "language": "Limbă",
+    "english": "Engleză",
+    "romanian": "Română",
+    "updateAvailable": "Actualizare disponibilă",
+    "reload": "Reîncarcă"
+  }
+}

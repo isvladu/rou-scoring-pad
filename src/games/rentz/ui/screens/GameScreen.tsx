@@ -2,12 +2,13 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useGameStore } from '../../state/gameStore';
-import Scoreboard from '../components/Scoreboard';
+import { totalScores } from '../../domain/scoring';
+import Scoreboard from '../../../../core/components/Scoreboard';
 import RotationGrid from '../components/RotationGrid';
 import RoundHistory from '../components/RoundHistory';
 
 export default function GameScreen() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const { id } = useParams();
   const navigate = useNavigate();
   const { active, load, undoLastRound, rotation } = useGameStore();
@@ -40,7 +41,12 @@ export default function GameScreen() {
         )}
       </section>
 
-      <Scoreboard game={active} highlightPickerId={rot.currentPickerId} />
+      <Scoreboard
+        players={active.players}
+        totals={totalScores(active.players, active.rounds)}
+        highlightedPlayerId={rot.currentPickerId}
+        highlightedPlayerLabel={t('game.picksLabel')}
+      />
 
       {(active.rounds.length > 0 || active.rentzRefusals.length > 0) && (
         <details className="rounded-lg border border-slate-800 bg-slate-900/50 p-3">

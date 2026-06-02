@@ -1,12 +1,9 @@
 import type { ScoringConfig } from '../config/scoringDefaults';
+import type { Player, PlayerId } from '../../../core/types';
 
-export type PlayerId = string;
+export type { Player, PlayerId };
+
 export type PlayerCount = 4 | 5 | 6;
-
-export interface Player {
-  id: PlayerId;
-  name: string;
-}
 
 export type ContractId =
   | 'noTricks'

@@ -8,7 +8,7 @@ import {
 } from '../../domain/rentzRefusals';
 
 export default function RentzCheckScreen() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rentz');
   const { id } = useParams();
   const navigate = useNavigate();
   const { active, load, rotation, recordRentzRefusal } = useGameStore();

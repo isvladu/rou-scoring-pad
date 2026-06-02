@@ -8,9 +8,27 @@ import {
   type RoundEntry,
 } from './types';
 
+/**
+ * Structured validation error. Domain returns codes + params; the UI maps
+ * them to translated strings if it ever needs to display them. The Rentz
+ * UI currently uses validation only to gate the Save button, but the codes
+ * are designed so that if/when error text is shown to the user, it can be
+ * localised via `t('roundEntry.errors.<code>', { ... })`.
+ */
+export type CountCategory = 'tricks' | 'diamonds' | 'queens';
+export type TakerRole = 'kingOfHearts' | 'tenOfClubs';
+
+export type ValidationErrorCode =
+  | { code: 'countsMustBeNonNeg'; category: CountCategory }
+  | { code: 'countSumMismatch'; category: CountCategory; expected: number; actual: number }
+  | { code: 'pickTaker'; role: TakerRole }
+  | { code: 'rentzRankAll'; expected: number }
+  | { code: 'rentzDuplicate' }
+  | { code: 'rentzUnknownPlayer'; playerId: string };
+
 export interface ValidationResult {
   ok: boolean;
-  errors: string[];
+  errors: ValidationErrorCode[];
 }
 
 function sumOf(counts: Record<PlayerId, number>, players: Player[]): number {
@@ -25,15 +43,15 @@ function validateCounter(
   counts: Record<PlayerId, number>,
   players: Player[],
   expected: number,
-  label: string,
+  category: CountCategory,
 ): ValidationResult {
-  const errors: string[] = [];
+  const errors: ValidationErrorCode[] = [];
   if (!nonNegative(counts, players)) {
-    errors.push(`${label} counts must be non-negative integers.`);
+    errors.push({ code: 'countsMustBeNonNeg', category });
   }
-  const sum = sumOf(counts, players);
-  if (sum !== expected) {
-    errors.push(`${label} sum must equal ${expected}, got ${sum}.`);
+  const actual = sumOf(counts, players);
+  if (actual !== expected) {
+    errors.push({ code: 'countSumMismatch', category, expected, actual });
   }
   return { ok: errors.length === 0, errors };
 }
@@ -41,11 +59,11 @@ function validateCounter(
 function validateTaker(
   takerId: PlayerId | undefined,
   players: Player[],
-  label: string,
+  role: TakerRole,
 ): ValidationResult {
-  const errors: string[] = [];
+  const errors: ValidationErrorCode[] = [];
   if (!takerId || !players.some((p) => p.id === takerId)) {
-    errors.push(`${label}: pick exactly one player.`);
+    errors.push({ code: 'pickTaker', role });
   }
   return { ok: errors.length === 0, errors };
 }
@@ -58,39 +76,40 @@ export function validateRoundEntry(
   switch (entry.contract) {
     case 'noTricks':
     case 'whist':
-      return validateCounter(entry.counts, players, TRICKS_PER_HAND, 'Tricks');
+      return validateCounter(entry.counts, players, TRICKS_PER_HAND, 'tricks');
     case 'noDiamonds':
-      return validateCounter(entry.counts, players, diamondsInDeck(playerCount), 'Diamonds');
+      return validateCounter(entry.counts, players, diamondsInDeck(playerCount), 'diamonds');
     case 'noQueens':
-      return validateCounter(entry.counts, players, QUEENS_IN_DECK, 'Queens');
+      return validateCounter(entry.counts, players, QUEENS_IN_DECK, 'queens');
     case 'noKingOfHearts':
+      return validateTaker(entry.takerId, players, 'kingOfHearts');
     case 'tenOfClubs':
-      return validateTaker(entry.takerId, players, 'Taker');
+      return validateTaker(entry.takerId, players, 'tenOfClubs');
     case 'totals': {
-      const tricks = validateCounter(entry.tricks, players, TRICKS_PER_HAND, 'Tricks');
+      const tricks = validateCounter(entry.tricks, players, TRICKS_PER_HAND, 'tricks');
       const diamonds = validateCounter(
         entry.diamonds,
         players,
         diamondsInDeck(playerCount),
-        'Diamonds',
+        'diamonds',
       );
-      const queens = validateCounter(entry.queens, players, QUEENS_IN_DECK, 'Queens');
-      const king = validateTaker(entry.kingOfHeartsTakerId, players, 'King of Hearts');
+      const queens = validateCounter(entry.queens, players, QUEENS_IN_DECK, 'queens');
+      const king = validateTaker(entry.kingOfHeartsTakerId, players, 'kingOfHearts');
       const errors = [...tricks.errors, ...diamonds.errors, ...queens.errors, ...king.errors];
       return { ok: errors.length === 0, errors };
     }
     case 'rentz': {
-      const errors: string[] = [];
+      const errors: ValidationErrorCode[] = [];
       if (entry.finishingOrder.length !== players.length) {
-        errors.push(`Rank all ${players.length} players.`);
+        errors.push({ code: 'rentzRankAll', expected: players.length });
       }
       const uniq = new Set(entry.finishingOrder);
       if (uniq.size !== entry.finishingOrder.length) {
-        errors.push('Each player can appear only once.');
+        errors.push({ code: 'rentzDuplicate' });
       }
       for (const pid of entry.finishingOrder) {
         if (!players.some((p) => p.id === pid)) {
-          errors.push(`Unknown player ${pid}.`);
+          errors.push({ code: 'rentzUnknownPlayer', playerId: pid });
           break;
         }
       }
