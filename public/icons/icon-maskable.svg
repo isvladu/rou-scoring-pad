@@ -1,4 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#0f172a"/>
-  <text x="256" y="330" font-family="-apple-system, system-ui, sans-serif" font-size="220" font-weight="700" text-anchor="middle" fill="#fbbf24">R</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16213b"></stop>
+      <stop offset="1" stop-color="#0b1220"></stop>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcd34d"></stop>
+      <stop offset="1" stop-color="#f59e0b"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"></rect>
+
+  <g transform="translate(256 256) scale(0.74) translate(-256 -286)">
+    <g transform="rotate(-22 256 452)">
+      <rect x="170" y="164" width="172" height="244" rx="20" fill="#1e293b" stroke="#fbbf24" stroke-width="5"></rect>
+      <path d="M50 12 L82 50 L50 88 L18 50 Z" fill="#fbbf24" transform="translate(219 249) scale(0.74)"></path>
+      <text x="200" y="202" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="800" font-size="34" text-anchor="middle" fill="#fbbf24">A</text>
+      <path d="M50 12 L82 50 L50 88 L18 50 Z" fill="#fbbf24" transform="translate(190 214) scale(0.2)"></path>
+    </g>
+
+    <g transform="rotate(22 256 452)">
+      <rect x="170" y="164" width="172" height="244" rx="20" fill="#1e293b" stroke="#fbbf24" stroke-width="5"></rect>
+      <g fill="#fbbf24" transform="translate(219 249)">
+        <circle cx="37" cy="23.68" r="14.8"></circle>
+        <circle cx="23.68" cy="39.96" r="14.8"></circle>
+        <circle cx="50.32" cy="39.96" r="14.8"></circle>
+        <path d="M37 35.52 C37 47.36 33.3 59.2 28.86 66.6 L45.14 66.6 C40.7 59.2 37 47.36 37 35.52 Z"></path>
+      </g>
+      <text x="200" y="202" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="800" font-size="34" text-anchor="middle" fill="#fbbf24">A</text>
+      <g fill="#fbbf24" transform="translate(190 214)">
+        <circle cx="10" cy="6.4" r="4"></circle>
+        <circle cx="6.4" cy="10.8" r="4"></circle>
+        <circle cx="13.6" cy="10.8" r="4"></circle>
+        <path d="M10 9.6 C10 12.8 9 16 7.8 18 L12.2 18 C11 16 10 12.8 10 9.6 Z"></path>
+      </g>
+    </g>
+
+    <g>
+      <rect x="168" y="152" width="176" height="248" rx="20" fill="url(#gold)"></rect>
+      <path d="M50 13 C50 34 81 44 81 62 C81 73 71 80 62 76 C58 74 55 71 54 67 C54 75 57 83 63 88 L37 88 C43 83 46 75 46 67 C45 71 42 74 38 76 C29 80 19 73 19 62 C19 44 50 34 50 13 Z" fill="#0f172a" transform="translate(200 222) scale(1.12)"></path>
+      <text x="198" y="196" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="800" font-size="34" text-anchor="middle" fill="#0f172a">A</text>
+      <path d="M50 13 C50 34 81 44 81 62 C81 73 71 80 62 76 C58 74 55 71 54 67 C54 75 57 83 63 88 L37 88 C43 83 46 75 46 67 C45 71 42 74 38 76 C29 80 19 73 19 62 C19 44 50 34 50 13 Z" fill="#0f172a" transform="translate(188 208) scale(0.2)"></path>
+      <g transform="rotate(180 314 360)">
+        <text x="314" y="360" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-weight="800" font-size="34" text-anchor="middle" fill="#0f172a">A</text>
+        <path d="M50 13 C50 34 81 44 81 62 C81 73 71 80 62 76 C58 74 55 71 54 67 C54 75 57 83 63 88 L37 88 C43 83 46 75 46 67 C45 71 42 74 38 76 C29 80 19 73 19 62 C19 44 50 34 50 13 Z" fill="#0f172a" transform="translate(304 372) scale(0.2)"></path>
+      </g>
+    </g>
+  </g>
 </svg>
