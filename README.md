@@ -1,45 +1,39 @@
-# Rentz Scoring
+# Scoring Pad
 
-A mobile-first, installable **PWA scoring pad** for the Romanian card game **Rentz**.
+A mobile-first, installable **PWA scoring pad** for four card games — **Rentz**, **Whist Românesc**, **Phase 10**, and **Remi (Romanian Rummy)**.
 
-Built to replace the napkin you used to scribble on. Works fully offline once installed, stores games locally in IndexedDB, and lets you export/import games as JSON so you can move them between devices.
+Built to replace the napkin you used to scribble on. Works fully offline once installed, stores games locally in per-game IndexedDBs, and lets you export/import games as JSON — either per-game or as a unified envelope across all four.
 
-## What it does
+## Games
 
-Rentz is a Romanian trick-taking card game played by 4, 5, or 6 players. Each game runs through every player dealing every contract once, so a 4-player game is 32 rounds, 5p is 40, 6p is 48. The app:
+| Game | Players | What it tracks |
+|---|---|---|
+| **Rentz** | 3 – 6 | Romanian trick-taking with 8 contracts (No Tricks, No Diamonds, No Queens, No K♥, 10♣, Totals, Whist, Rentz). Each player picks each contract once → games run 24 / 32 / 40 / 48 rounds. Blind ("pe nevăzute") and the Rentz-refusal house rule are both modeled. |
+| **Whist Românesc** | 3 – 6 | Variable hand-size schedule of `1×N, 2..7, 8×N, 7..2, 1×N` (21 / 24 / 27 / 30 rounds). Bid-vs-tricks scoring with the dealer constraint, plus configurable house rules: zero-bid bonus, max-bid bonus, and a premiere streak bonus (5 consecutive correct bids excluding hand-size-1 rounds → +10 by default). |
+| **Phase 10** | 2 – 6 | Standard Mattel rules — 10 phases completed in order, penalty points for cards left in hand, game ends when a phase-10 finisher closes the hand. Lowest total penalty among finishers wins. |
+| **Remi** | 2 – 4 | Tile-based Romanian Rummy. Per-hand entry covers melded value, rack value, Joly first-meld bonus, Joly-on-rack penalty, identical-exposed declaration, self-win, and the optional double-on-Joly-discard house rule. Game ends at a target score or a fixed hand count. |
 
-- Manages the **rotation** — tracks who deals next and which contracts they still owe.
-- Runs **per-trick guided entry** for each contract, with live sum validation so you can't save a Levate round whose tricks don't add up to 8.
-- Computes scores from a **single editable config file** (`src/config/scoringDefaults.ts`); house-rule values can be overridden per game.
-- Keeps a **live scoreboard** ranked by current total, and a finishing summary with optional JSON export.
-- Speaks **English and Romanian** — UI toggle in the header.
+What every game shares:
 
-### Contracts modeled
+- Pure scoring + validation functions — UI calls them, tests act as the spec.
+- Live scoreboard, undo last round/hand, collapsible round/hand history.
+- Per-game **JSON export** (`<gameId>-scoring-app` legacy envelope) plus a unified **`scoring-pad`** envelope from the landing screen that carries games of every type.
+- English and Romanian — toggle in the header.
+- Stored locally in IndexedDB. Fully offline after install.
 
-| Code id           | English            | Romanian             | Notes                          |
-| ----------------- | ------------------ | -------------------- | ------------------------------ |
-| `noTricks`        | No Tricks          | Levate               | per trick taken (negative)     |
-| `noDiamonds`      | No Diamonds        | Carouri              | per diamond taken (negative)   |
-| `noQueens`        | No Queens          | Dame                 | per queen taken (negative)     |
-| `noKingOfHearts`  | No King of Hearts  | Regele de Inimă Roșie | single taker (negative)        |
-| `tenOfClubs`      | 10 of Clubs        | 10 de Treflă         | single taker (**positive**)    |
-| `totals`          | Totals             | Totale               | all four negatives combined    |
-| `whist`           | Whist              | Whist                | per trick taken, no bidding    |
-| `rentz`           | Rentz              | Rentz                | finishing-order ranking only   |
-
-Default scoring values are conventions, not law — edit `src/config/scoringDefaults.ts` or override per game.
+Default scoring values are conventions, not law — every game's `NewGame` screen has a "Scoring (advanced)" section where the values can be overridden per-game.
 
 ## Tech stack
 
 - **React 19** + **TypeScript** + **Vite 8**
 - **Tailwind CSS v4** (utility-first, dark by default)
 - **vite-plugin-pwa** — manifest, service worker, auto-update
-- **Zustand** — active-game state
-- **idb** — typed IndexedDB wrapper
-- **React Router v7** — screen routing
-- **i18next** + **react-i18next** — English + Romanian
-- **Zod** — JSON import schema validation
-- **Vitest** — unit tests for the scoring engine and storage roundtrip
+- **Zustand** — active-game state, one store per game
+- **idb** — typed IndexedDB wrapper (one DB per game)
+- **React Router v7** — top-level router + per-game sub-routers, `React.lazy` per game
+- **i18next** + **react-i18next** — EN + RO, namespaced per game; only the `common` namespace ships in the initial bundle
+- **Zod** — JSON import schema validation, with backward-compatible preprocessors and defaults
+- **Vitest** — unit tests for scoring engines, validation, and storage roundtrips
 
 ## Getting started
 
@@ -70,57 +64,121 @@ npm run build
 npm run preview -- --host 0.0.0.0
 ```
 
-Then open the printed LAN URL on your phone, "Add to home screen", and you should see "Rentz" launch full-screen. Toggle airplane mode and reload — it should still load and the current game should persist.
+Then open the printed LAN URL on your phone, "Add to home screen", and you should see **Scoring Pad** launch full-screen. Toggle airplane mode and reload — it should still load and saved games should persist.
+
+## Routing
+
+| Route | Purpose |
+|---|---|
+| `/` | Game selector — lists the four games + Export all / Import buttons |
+| `/rentz/*` | Rentz module (lazy chunk) |
+| `/whist/*` | Whist module (lazy chunk) |
+| `/phase10/*` | Phase 10 module (lazy chunk) |
+| `/remi/*` | Remi module (lazy chunk) |
+
+Initial JS is **~96 KB gzipped** (landing + core). Each game module is 6 – 12 KB gzipped and loads on first navigation to its route.
 
 ## Project layout
 
 ```
 src/
-  config/scoringDefaults.ts   single source of truth for point values
-  domain/                     pure logic — scoring, validation, rotation, types
-  storage/                    IndexedDB repo + JSON export/import (zod schema)
-  state/gameStore.ts          Zustand store for the active game
-  i18n/                       i18next setup + en.json / ro.json
+  core/
+    components/        AppHeader, LanguageToggle, UpdateBanner, Scoreboard,
+                       PlayerStepper, PlayerRanker, PlayerSinglePick
+    storage/           createGamesRepo<T>, GameAdapter, triggerDownload,
+                       unifiedExportImport (orchestrates per-game adapters
+                       via dynamic import)
+    i18n/              i18next setup + common namespace (en, ro)
+    types.ts           Player, PlayerId
+  games/
+    rentz/             one module per game:
+    whist/               config/      default scoring values
+    phase10/             domain/      pure logic — types, scoring,
+    remi/                             validation, rotation/schedule
+                         storage/     IndexedDB repo + Zod schema + adapter
+                         state/       Zustand store
+                         i18n/        en.json + ro.json (this game's namespace)
+                         ui/
+                           screens/     route-level components
+                           components/  game-specific widgets
+                         index.tsx    sub-router + i18n namespace registration
   ui/
-    screens/                  route-level components
-    components/               Scoreboard, PlayerStepper, PlayerRanker, ...
-  App.tsx                     router + update-available banner
-  main.tsx                    React bootstrap
+    screens/HomeScreen.tsx   landing — game selector + Export all / Import
+  App.tsx              top-level router + Suspense (React.lazy per game)
+  main.tsx             React bootstrap
 
-tests/                        Vitest unit tests
-public/icons/                 SVG icons referenced by the PWA manifest
-vite.config.ts                Vite + PWA + Tailwind + Vitest config
-CLAUDE.md                     project guidance for AI agents
+tests/
+  core/                unifiedExportImport tests
+  games/<gameId>/      per-game scoring, validation, schedule, storage tests
+public/icons/          SVG icons referenced by the PWA manifest
+vite.config.ts         Vite + PWA + Tailwind + Vitest config
+CLAUDE.md              project guidance for AI agents
 ```
 
 ## Working on the code
 
 A few conventions worth knowing before you start editing:
 
-1. **Code identifiers are English-only.** Contract ids are `noTricks`, `noDiamonds`, etc. — never `levate` or `carouri`. Romanian text lives exclusively in `src/i18n/locales/ro.json`. JSON exports use the English ids too, so games are portable across UI languages.
-2. **Scoring logic stays pure.** Functions in `src/domain/scoring.ts` and `src/domain/validation.ts` take inputs and return outputs — no DOM, no storage, no randomness. The UI calls them; tests use them as the spec.
-3. **The UI never computes scores itself.** Always call `computeRoundScores` from `src/domain/scoring.ts`. Live previews (e.g. the Rentz finishing-order preview) go through the same function the committed scores do.
-4. **All persistence goes through `src/storage/gamesRepo.ts`.** Don't reach into `idb` directly from a component.
-5. **When you add a UI string, add it to both `en.json` and `ro.json` in the same change.** Missing keys silently fall back to English.
+1. **Code identifiers are English-only.** Enum values, type names, file names, persisted JSON fields — all English. Romanian text lives exclusively in `src/games/<gameId>/i18n/ro.json` (and the shared `src/core/i18n/locales/ro.json`). JSON exports use the English ids too, so games are portable across UI languages.
+2. **Scoring + validation stay pure.** Functions in `src/games/<gameId>/domain/scoring.ts` and `domain/validation.ts` take inputs and return outputs — no DOM, no storage, no randomness, no i18n. The UI calls them; tests act as the spec. Validation returns **structured error codes**; the UI translates them.
+3. **The UI never computes scores itself.** Always call `computeRoundScores` / `computeHandScores` from the game's `domain/scoring.ts`. Live previews go through the same function the committed scores do.
+4. **All persistence goes through `src/games/<gameId>/storage/gamesRepo.ts`**, which sits on `src/core/storage/createGamesRepo<T>`. Don't reach into `idb` directly from a component.
+5. **When you add a UI string, add it to both `en.json` and `ro.json` in the same change.** Missing keys silently fall back to English (via `fallbackNS: 'common'`).
+6. **`src/core/` may not import from `src/games/`.** The single sanctioned exception is `src/core/storage/unifiedExportImport.ts`, which orchestrates per-game adapters via dynamic imports — adapters never hit the landing chunk.
 
-### Adding a new contract
+### Adding a new game module
 
-1. Add the id to `ContractId` and `ALL_CONTRACTS` in `src/domain/types.ts`, and extend `RoundEntry`.
-2. Add default point values + type to `src/config/scoringDefaults.ts`.
-3. Add a branch to `computeRoundScores` in `src/domain/scoring.ts`.
-4. Add a branch to `validateRoundEntry` in `src/domain/validation.ts`.
-5. Add a branch to `RoundEntryScreen.tsx` for the entry UI.
-6. Add labels to **both** `src/i18n/locales/en.json` and `ro.json` under `contracts.<id>`.
-7. Add unit tests in `tests/scoring.test.ts`.
+1. Create `src/games/<gameId>/` with `config/`, `domain/`, `storage/`, `state/`, `ui/`, `i18n/`.
+2. Implement domain (`types`, `scoring`, `validation`) as pure functions. Tests cover them as the spec.
+3. Implement `storage/db.ts` declaring a `GamesSchema<YourGame>` and a unique DB name. `gamesRepo.ts` is a 9-line wrapper over `createGamesRepo<YourGame>`.
+4. Implement `storage/exportImport.ts` with a Zod schema and a legacy envelope (`<gameId>-scoring-app`). Export `GameSchema` and `ExportSchema` as named exports.
+5. Implement `storage/adapter.ts` conforming to `GameAdapter` from `src/core/storage/gameAdapter.ts`.
+6. Wire the adapter into `loadAdapters()` in `src/core/storage/unifiedExportImport.ts` so the unified envelope picks it up.
+7. Implement `state/gameStore.ts` (Zustand), `i18n/en.json` + `ro.json`, and UI screens.
+8. Create `index.tsx` that registers the game's i18n namespace at module-eval time and mounts the sub-router.
+9. Wire into `App.tsx` with `React.lazy(() => import('./games/<gameId>'))` and activate the landing tile in `src/ui/screens/HomeScreen.tsx`.
 
 ### Verifying a change before you ship
 
-1. `npm test` — green.
+1. `npm test` — all green.
 2. `npm run build` — succeeds.
-3. `npm run preview` — start a 4-player game, play one round of every contract, confirm totals match a hand-computed reference.
-4. Switch language EN ↔ RO mid-game; labels update, scores don't.
-5. Export the game, import it on a fresh profile, confirm totals match.
-6. DevTools → throttle to offline, reload — the app still loads.
+3. `npm run preview` — open in the browser, start a game in each affected module, play one round, confirm totals match a hand-computed reference.
+4. Switch language EN ↔ RO mid-game; all labels update, totals/state are unchanged.
+5. Export the game, import it on a fresh profile, confirm totals match. Also test the **unified envelope**: landing → Export all → Import on a clean profile → all games re-appear in their respective stores.
+6. DevTools → throttle to offline, reload — the app still loads and saved games persist.
+
+## Export / import formats
+
+Two formats are accepted on import; auto-detected on every Import button (per-game home screens and the landing screen).
+
+**Per-game legacy** — what each game's per-game Export button on the summary screen emits. The `format` literal identifies the game:
+
+```json
+{
+  "format": "rentz-scoring-app",
+  "version": 1,
+  "exportedAt": "...",
+  "games": [{ ... }]
+}
+```
+
+**Unified `scoring-pad` envelope** — what the landing's Export all button emits. Carries records of every game type in one file:
+
+```json
+{
+  "format": "scoring-pad",
+  "version": 1,
+  "exportedAt": "...",
+  "games": [
+    { "gameType": "rentz",   "schemaVersion": 1, "game": { ... } },
+    { "gameType": "whist",   "schemaVersion": 1, "game": { ... } },
+    { "gameType": "phase10", "schemaVersion": 1, "game": { ... } },
+    { "gameType": "remi",    "schemaVersion": 1, "game": { ... } }
+  ]
+}
+```
+
+The per-game export remains unchanged so older backups continue working forever.
 
 ## License
 
